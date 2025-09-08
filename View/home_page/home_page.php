@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Clinic Management System</title>
-        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="./style.css">
     </head>
     <body>
         <!-- Header Section -->
@@ -23,8 +23,8 @@
                 <h1>Welcome to our Clinic Management System</h1>
                 <p>Streamlining healthcare management for Doctors and Patients.</p>
                 <div class="main-content-buttons">
-                    <a href="" class="login-button">Login</a>
-                    <a href="" class="register-button">Register</a>
+                    <a href="../login_reg_forget/login/login.php" class="login-button">Login</a>
+                    <a href="../login_reg_forget/registration/reg.php" class="register-button">Register</a>
                 </div>
             </div>
         </section>
