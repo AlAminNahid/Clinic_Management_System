@@ -44,9 +44,9 @@ A **web-based application** designed to streamline communication and management 
 ## ⚙️ Technologies Used  
 
 - **Frontend**: HTML, CSS, JavaScript  
-- **Backend**: PHP / Node.js (depending on your implementation)  
-- **Database**: MySQL / MariaDB  
-- **Other Tools**: Bootstrap / Tailwind (for UI), GitHub for version control  
+- **Backend**: PHP
+- **Database**: MySQL
+- **Other Tools**: GitHub for version control  
 
 ---
 
