@@ -24,23 +24,23 @@ header {
     font-weight: bold;
 }
 
-.nav-ul {
+.reg-nav-ul {
     list-style: none;
     display: flex;
     gap: 20px;
 }
 
-.nav-li a{
+.reg-nav-ul li a {
     text-decoration: none;
     color: #fff;
     font-weight: 500;
 }
 
-.nav-li a:hover {
+.reg-nav-ul li a:hover {
     text-decoration: underline;
 }
 
-.forget-pass-section {
+.reg-section {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -48,25 +48,25 @@ header {
     padding: 20px;
 }
 
-.forget-pass-box {
+.reg-box {
     background: #fff;
     padding: 40px 30px;
     border-radius: 12px;
-    box-shadow: 0px 5px 15px rgb(0, 0, 0, 1);
-    max-width: 400px;
+    box-shadow: 0px 5px 15px rbga(0, 0, 0, 1);
+    max-width: 500px;
     width: 100%;
     text-align: center;
 }
 
-.forget-pass-box h2 {
+.reg-box h2 {
     color: #0077cc;
     margin-bottom: 10px;
 }
 
 .subtitle {
-    font-size: 12px;
+    font-family: 14px;
     color: #555;
-    margin-bottom: 25px;
+    margin-bottom: 15px;
 }
 
 .form-group {
@@ -75,13 +75,13 @@ header {
 }
 
 .form-group label {
-    font-size: 14px;
+    font-family: 14px;
     color: #333;
     display: block;
     margin-bottom: 6px;
 }
 
-.form-group input {
+.form-group input, select {
     width: 100%;
     padding: 12px;
     border: 1px solid #ccc;
@@ -91,14 +91,14 @@ header {
     transition: 0.3s;
 }
 
-.form-group input:focus {
+.form-group input:focus, select:focus {
     border-color: #0077cc;
     box-shadow: 0px 0px 4px rgba(0, 119, 204, 0.3);
 }
 
 .submit-button {
     display: inline-block;
-    background: #0077cc;
+    background-color: #0077cc;
     color: white;
     padding: 14px;
     border: none;
