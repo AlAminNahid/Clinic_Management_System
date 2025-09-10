@@ -1,0 +1,138 @@
+* {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+    font-family: arial, sans-serif;
+}
+
+body {
+    background-color: #f5f7fa;
+    color: #333;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #0077cc;
+    padding: 15px 40px;
+    color: #fff;
+}
+
+.logo {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.nav-ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.nav-li a{
+    text-decoration: none;
+    color: #fff;
+    font-weight: 500;
+}
+
+.nav-li a:hover {
+    text-decoration: underline;
+}
+
+.forget-pass-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    padding: 20px;
+}
+
+.forget-pass-box {
+    background: #fff;
+    padding: 40px 30px;
+    border-radius: 12px;
+    box-shadow: 0px 5px 15px rgb(0, 0, 0, 1);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+}
+
+.forget-pass-box h2 {
+    color: #0077cc;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    font-size: 12px;
+    color: #555;
+    margin-bottom: 25px;
+}
+
+.form-group {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    font-size: 14px;
+    color: #333;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    transition: 0.3s;
+}
+
+.form-group input:focus {
+    border-color: #0077cc;
+    box-shadow: 0px 0px 4px rgb(0, 119, 204, 0.3);
+}
+
+.submit-button {
+    display: inline-block;
+    background: #0077cc;
+    color: white;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: 0.3s;
+    width: 100%;
+}
+
+.submit-button:hover {
+    background: #005fa3;
+}
+
+.end-subtitle {
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.end-subtitle a {
+    color: #0077cc;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.end-subtitle a:hover {
+    text-decoration: underline;
+}
+
+footer {
+    background: #0077cc;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    margin-top: 40px;
+}
