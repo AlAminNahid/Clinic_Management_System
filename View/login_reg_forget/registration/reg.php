@@ -38,6 +38,7 @@
                         <label for="user-type">Register As</label>
                         <select class="user-type" name="user-type" id="user-type" required>
                             <option value="" disable selected>Select user type</option>
+                            <option value="admin">Admin</option>
                             <option value="patient">Patient</option>
                             <option value="doctor">Doctor</option>
                         </select>
