@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Login | Clinic Management System</title>
         <link rel="stylesheet" href="./style.css">
+        <script src="./verification.js"></script>
     </head>
     <body>
         <header>
@@ -22,11 +23,11 @@
                 <form action="">
                     <div class="form-group">
                         <label for="email">Email</label>
-                        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                        <input type="email" id="email" name="email" placeholder="Enter your email">
                     </div>
                     <div class="form-group">
                         <label for="password">Password</label>
-                        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                        <input type="password" id="password" name="password" placeholder="Enter your password">
                     </div>
                     <div class="form-option">
                         <label>
@@ -36,7 +37,7 @@
                     </div>
                     <button type="SUBMIT" class="submit-button">Login</button>
                 </form>
-                <p class="signup-link">Don't have an account? <a href="../register/reg.php">Register here</a></p>
+                <p class="signup-link">Don't have an account? <a href="../registration/reg.php">Register here</a></p>
             </div>
         </section>
         <footer>

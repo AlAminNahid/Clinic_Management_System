@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Register | Clinic Managemenet System</title>
         <link rel="stylesheet" href="./style.css">
+        <script src="./verification.js"></script>
     </head>
     <body>
         <header>
@@ -24,19 +25,19 @@
                 <form action="" class="reg-box">
                     <div class="form-group">
                         <label for="name">Full Name</label>
-                        <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+                        <input type="text" id="name" name="name" placeholder="Enter your full name">
                     </div>
                     <div class="form-group">
                         <label for="email">Email Address</label>
-                        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                        <input type="email" id="email" name="email" placeholder="Enter your email">
                     </div>
                     <div class="form-group">
                         <label for="phone">Phone Number</label>
-                        <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required>
+                        <input type="tel" id="phone" name="phone" placeholder="Enter your phone number">
                     </div>
                     <div class="form-group">
                         <label for="user-type">Register As</label>
-                        <select class="user-type" name="user-type" id="user-type" required>
+                        <select class="user-type" name="user-type" id="user-type">
                             <option value="" disable selected>Select user type</option>
                             <option value="admin">Admin</option>
                             <option value="patient">Patient</option>
@@ -45,11 +46,11 @@
                     </div>
                     <div class="form-group">
                         <label for="password">Password</label>
-                        <input type="password" id="password" name="password" placeholder="Enter password" required>
+                        <input type="password" id="password" name="password" placeholder="Enter password">
                     </div>
                     <div class="form-group">
                         <label for="confirm-pass">Confirm Password</label>
-                        <input type="password" id="confirm-pass" name="confirm-pass" placeholder="Re-enter password" required>
+                        <input type="password" id="confirm-pass" name="confirm-pass" placeholder="Re-enter password">
                     </div>
                     <button type="submit" class="submit-button">Submit</button>
                 </form>
