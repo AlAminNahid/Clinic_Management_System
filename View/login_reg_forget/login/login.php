@@ -20,7 +20,7 @@
             <div class="login-box">
                 <h2>Login</h2>
                 <p class="subtitle">Welcome! Please Log-in to continue</p>
-                <form action="">
+                <form action="../../../Controller/loginAction.php" method="POST">
                     <div class="form-group">
                         <label for="email">Email</label>
                         <input type="email" id="email" name="email" placeholder="Enter your email">

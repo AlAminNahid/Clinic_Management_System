@@ -22,7 +22,7 @@
                 <h2>Create Account</h2>
                 <p class="subtitle">Join our system as a Patient, Doctor</p>
 
-                <form action="" class="reg-box">
+                <form action="../../../Controller/registerAction.php" class="reg-box" method="POST">
                     <div class="form-group">
                         <label for="name">Full Name</label>
                         <input type="text" id="name" name="name" placeholder="Enter your full name">
@@ -38,7 +38,7 @@
                     <div class="form-group">
                         <label for="user-type">Register As</label>
                         <select class="user-type" name="user-type" id="user-type">
-                            <option value="" disable selected>Select user type</option>
+                            <option value="" disabled selected>Select user type</option>
                             <option value="admin">Admin</option>
                             <option value="patient">Patient</option>
                             <option value="doctor">Doctor</option>
