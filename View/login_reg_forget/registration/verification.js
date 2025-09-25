@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function(){
         const password = document.querySelector("input[name='password']").value;
         const confirmPassword = document.querySelector("input[name='confirm-pass']").value;
 
-        if(name.trim() === "" || email.trim() === "" || phoneNumber.trim() === "" || userType.trim() === "" || password.trim()){
+        if(name.trim() === "" || email.trim() === "" || phoneNumber.trim() === "" || userType.trim() === "" || password.trim() === "" || confirmPassword.trim() === ""){
             alert("All fields are required.");
             e.preventDefault();
         }

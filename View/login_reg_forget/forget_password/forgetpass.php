@@ -21,7 +21,7 @@
             <div class="forget-pass-box">
                 <h2>Forget Password</h2>
                 <p class="subtitle">Enter your register email and new password.</p>
-                <form action="" method="POST">
+                <form action="../../../Controller/forgetPasswordAction.php" method="POST">
                     <div class="form-group">
                         <label for="email">Email Address</label>
                         <input type="email" id="email" name="email" placeholder="Enter your email">
