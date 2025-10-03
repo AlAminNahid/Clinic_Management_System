@@ -32,9 +32,8 @@
                 }
 
                 if($user['Role'] === 'admin'){
-                    echo "Admin login successful.";
-                    //header("Location: ../forms/");
-                    //exit;
+                    header("Location: ../View/dashboards/admin_/admin.php");
+                    exit;
                 }
                 else if($user['Role'] === 'doctor'){
                     echo "Doctor login successful.";
