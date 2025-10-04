@@ -32,26 +32,49 @@
                 }
 
                 if($user['Role'] === 'admin'){
-                    header("Location: ../View/dashboards/admin_/admin.php");
+                    echo "
+                        <script>
+                            alert('Admin login successful.');
+                            window.location.href = '../View/dashboards/admin_/admin.php';
+                        </script>
+                    ";
                     exit;
                 }
                 else if($user['Role'] === 'doctor'){
-                    echo "Doctor login successful.";
-                    //header("Location: ../forms");
-                    //exit;
+                    echo "
+                        <script>
+                            alert('Doctor login successful.');
+                            window.location.href = '../View/dashboards/doctor_/';
+                        </script>
+                    ";
+                    exit;
                 }
                 else if($user['Role'] === 'patient'){
-                    echo "Patient login successful.";
-                    //header("Location: ../forms");
-                    //exit;
+                    echo "
+                        <script>
+                            alert('Patient login successful.');
+                            window.location.href = '../View/dashboards/patient_/';
+                        </script>
+                    ";
+                    exit;
                 }
                 else{
-                    echo "unknown role. <a href='../View/login_reg_forget/login/login.php'>Try again</a>";
+                    echo "
+                        <script>
+                            alert('Unknown role, redirecting to login.');
+                            window.location.href = '../View/login_reg_forget/login/login.php';
+                        </script>
+                    ";
                 }
             }
         }
         else{
-            echo $validation . " <a href='../View/login_reg_forget/login/login.php'>Back</a>";
+            echo "
+                <script>
+                    alert('$validation');
+                    window.location.href = '../View/login_reg_forget/login/login.php';
+                </script>
+            ";
         }
     }
 ?>

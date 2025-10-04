@@ -18,14 +18,26 @@
 
         if($validation == true){
             if(updateAdminProfile($conn, $adminID, $name, $email, $phoneNumber, $password)){
-                echo "Profile updated successfully.";
+                echo "
+                    <script>
+                        alert('Profile updated successfully.');
+                    </script>
+                ";
             }
             else{
-                echo "Error: Could not update profile.";
+                echo "
+                    <script>
+                        alert('Error: Could not update profile.');
+                    </script>
+                ";
             }
         }
         else{
-            echo $validation;
+            echo "
+                <script>
+                    alert('$validation');
+                </script>
+            ";
         }
     }
 ?>

@@ -19,14 +19,29 @@
 
         if($validation === true){
             if(registerUser($conn, $name, $email, $phoneNumber, $role, $password)){
-                echo "Registration Successful. <a href='../View/login_reg_forget/login/login.php'>Login here</a>";
+                echo "
+                    <script>
+                        alert('Registration Successful!');
+                        window.location.href = '../View/login_reg_forget/login/login.php';
+                    </script>
+                ";
+                exit;   
             }
             else{
-                echo "Error: Could not register user.";
+                echo "
+                    <script>
+                        alert('Error: Could not register user.');
+                    </script>
+                ";
             }
         }
         else{
-            echo $validation;
+            echo "
+                <script>
+                    alert('$validation');
+                    window.location.href = '../View/login_reg_forget/registration/reg.php';
+                </script>
+            ";
         }
     }
 ?>

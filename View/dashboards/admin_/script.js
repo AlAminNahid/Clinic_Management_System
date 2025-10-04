@@ -13,4 +13,10 @@ document.addEventListener("DOMContentLoaded", () =>{
             document.getElementById(targetId).classList.add("active");
         });
     });
+
+    window.confirmLogout = function() {
+        if(confirm("Are you sure you want to log out?")){
+            window.location.href = "../../../Controller/logout.php";
+        }
+    }
 });

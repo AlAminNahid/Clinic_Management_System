@@ -20,7 +20,7 @@
                     <button class="menu-btn" data-target="appointments">appointments</button>
                     <button class="menu-btn" data-target="medicines">Medicines</button>
                     <button class="menu-btn" data-target="backup">Data Backup</button>
-                    <a href="../../../Controller/logout.php" class="menu-btn" >Logout</a>
+                    <button class="menu-btn" onclick="confirmLogout()">Logout</button>
             </div>
 
             <div class="content">

@@ -17,14 +17,28 @@
             $updated = updatePassword($conn, $email, $password);
 
             if($updated){
-                echo "Password has been reset successfully. <a href='../View/login_reg_forget/login/login.php'>Login here</a>";
+                echo "
+                    <script>
+                        alert('Password has been reset successfully.');
+                        window.location.href = '../View/login_reg_forget/login/login.php';
+                    </script>
+                    ";
             }
             else{
-                echo "Error: Could not update password. Make sure the email exists.";
+                echo "
+                    <script>
+                        alert('Error: Could not update password. Make sure the email exists.');
+                    </script>
+                ";
             }
         }
         else{
-            echo $validation . " <a href='../View/login_reg_forget/forget_password/forgetpass.php'>Back</a>";
+            echo "
+                <script>
+                    alert('$validation');
+                    window.location.href = '../View/login_reg_forget/forget_password/forgetpass.php';
+                </script>
+            ";
         }
     }
 ?>
