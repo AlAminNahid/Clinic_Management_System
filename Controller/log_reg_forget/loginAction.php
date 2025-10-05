@@ -4,7 +4,7 @@
     error_reporting(E_ALL);
 
     session_start();
-    include("../Model/userModel.php");
+    include("../../Model/userModel.php");
     include("../Validation/log_reg_forget/loginValidation.php");
 
     if($_SERVER["REQUEST_METHOD"] == "POST"){
@@ -35,7 +35,7 @@
                     echo "
                         <script>
                             alert('Admin login successful.');
-                            window.location.href = '../View/dashboards/admin_/admin.php';
+                            window.location.href = '../../View/dashboards/admin_/admin.php';
                         </script>
                     ";
                     exit;
@@ -44,7 +44,7 @@
                     echo "
                         <script>
                             alert('Doctor login successful.');
-                            window.location.href = '../View/dashboards/doctor_/';
+                            window.location.href = '../../View/dashboards/doctor_/';
                         </script>
                     ";
                     exit;
@@ -53,7 +53,7 @@
                     echo "
                         <script>
                             alert('Patient login successful.');
-                            window.location.href = '../View/dashboards/patient_/';
+                            window.location.href = '../../View/dashboards/patient_/';
                         </script>
                     ";
                     exit;

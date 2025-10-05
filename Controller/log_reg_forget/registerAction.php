@@ -4,7 +4,7 @@
     error_reporting(E_ALL);
 
     session_start();
-    include("../Model/userModel.php");
+    include("../../Model/userModel.php");
     include("../Validation/log_reg_forget/registerValidation.php");
 
     if($_SERVER["REQUEST_METHOD"] == "POST"){
