@@ -6,7 +6,8 @@
         <title>Admin Dashboard</title>
         <link rel="stylesheet" href="style.css">
         <script src="script.js"></script>
-        <script src="validation.js"></script>
+        <script src="adminProfileFormValidation.js"></script>
+        <script src="adminMedicineFormValidation.js"></script>
     </head>
 
     <body>
@@ -104,7 +105,7 @@
                 <div class="content-section" id="patients">
                     <div class="card">
                         <div class="card-header">
-                            <h2>Manage Patienst</h2>
+                            <h2>Manage Patients</h2>
                             <button class="add-btn">+ Add Patient</button>
                         </div>
                         <table class="data-table">
@@ -171,7 +172,34 @@
                     <div class="card">
                         <div class="card-header">
                             <h2>Manage Medicines</h2>
-                            <button class="add-btn">+ Add Medicines</button>
+                        </div>
+                        <div class="medicine-form">
+                            <h3>Add New Medicine</h3>
+                            <form action="../../../Controller/dashboard/admin/addMedicineAction.php" method="POST">
+                                <label for="medicine-name">Name</label>
+                                <input type="text" id="medicine-name" name="name" placeholder="Enter medicine name">
+
+                                <label for="medicine-type">Type</label>
+                                <select name="type" id="medicine-type">
+                                    <option value="">Select type</option>
+                                    <option value="tablet">Tablet</option>
+                                    <option value="syrup">Syrup</option>
+                                </select>
+
+                                <label for="medicine-strength">Strength</label>
+                                <input type="text" id="medicine-strength" name="strength" placeholder="Enter strength">
+
+                                <label for="medicine-manufacturer">Manufacturer</label>
+                                <input type="text" id="medicine-manufacturer" name="manufacturer" placeholder="Enter manufacturer">
+
+                                <label for="medicine-status">Status</label>
+                                <select name="status" id="medicine-status">
+                                    <option value="active">Active</option>
+                                    <option value="inactive">Inactive</option>
+                                </select>
+
+                                <button type="submit" class="save-btn">Add Medicine</button>
+                            </form>
                         </div>
                         <table class="data-table">
                             <thead>

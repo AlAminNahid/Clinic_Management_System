@@ -3,7 +3,7 @@
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
 
-    include("../Model/userModel.php");
+    include("../../Model/userModel.php");
     include("../Validation/log_reg_forget/forgetPasswordValidation.php");
 
     if($_SERVER["REQUEST_METHOD"] == "POST"){
