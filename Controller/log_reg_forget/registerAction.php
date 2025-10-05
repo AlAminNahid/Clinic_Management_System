@@ -5,7 +5,7 @@
 
     session_start();
     include("../Model/userModel.php");
-    include("./Validation/registerValidation.php");
+    include("../Validation/log_reg_forget/registerValidation.php");
 
     if($_SERVER["REQUEST_METHOD"] == "POST"){
         $name = $_POST['name'];

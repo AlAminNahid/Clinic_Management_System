@@ -4,7 +4,7 @@
     error_reporting(E_ALL);
 
     include("../Model/userModel.php");
-    include("./Validation/forgetPasswordValidation.php");
+    include("../Validation/log_reg_forget/forgetPasswordValidation.php");
 
     if($_SERVER["REQUEST_METHOD"] == "POST"){
         $email = $_POST['email'];

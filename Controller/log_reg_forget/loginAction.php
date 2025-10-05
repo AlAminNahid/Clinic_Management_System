@@ -5,7 +5,7 @@
 
     session_start();
     include("../Model/userModel.php");
-    include("./Validation/loginValidation.php");
+    include("../Validation/log_reg_forget/loginValidation.php");
 
     if($_SERVER["REQUEST_METHOD"] == "POST"){
         $email = $_POST['email'];

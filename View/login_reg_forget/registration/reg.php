@@ -22,7 +22,7 @@
                 <h2>Create Account</h2>
                 <p class="subtitle">Join our system as a Patient, Doctor</p>
 
-                <form action="../../../Controller/registerAction.php" class="reg-box" method="POST">
+                <form action="../../../Controller/log_reg_forget/registerAction.php" class="reg-box" method="POST">
                     <div class="form-group">
                         <label for="name">Full Name</label>
                         <input type="text" id="name" name="name" placeholder="Enter your full name">

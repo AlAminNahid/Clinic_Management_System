@@ -5,7 +5,7 @@
 
     session_start();
     include("../Model/userModel.php");
-    include("./Validation/adminProfileValidation.php");
+    include("../../Validation/dashboard/admin/adminProfileValidation.php");
 
     if($_SERVER["REQUEST_METHOD"] == "POST"){
         $adminID = $_SESSION['user_id'];

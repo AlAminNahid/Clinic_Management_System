@@ -50,7 +50,7 @@
                         <h2>Admin Profile</h2>
                         <div class="profile-form">
                             <h3>Update your profile</h3>
-                            <form action="../../../Controller/adminProfileAction.php" method="POST">
+                            <form action="../../../Controller/dashboard/admin/adminProfileAction.php" method="POST">
                                 <label for="fullname">Full Name</label>
                                 <input type="text" id="fullname" name="fullname" placeholder="Enter your full name">
 
