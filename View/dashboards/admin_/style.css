@@ -207,7 +207,7 @@ body {
     background: #f8f9fa;
 }
 
-#profile .profile-form {
+.profile-form {
     margin: 20px auto;
     max-width: 500px;
     padding: 20px;
@@ -217,24 +217,25 @@ body {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-#profile .profile-form h3 {
+.profile-form h3 {
     text-align: center;
     margin-bottom: 15px;
     color: #2c3e50;
 }
 
-#profile .profile-form form {
+.profile-form form {
     display: flex;
     flex-direction: column;
 }
 
-#profile .profile-form label {
+.profile-form label {
+    display: block;
     margin: 10px 0 5px;
     font-weight: bold;
     color: #34495e;
 }
 
-#profile .profile-form input {
+.profile-form input {
     padding: 10px;
     border: 1px solid #bdc3c7;
     border-radius: 5px;
@@ -243,7 +244,7 @@ body {
     transition: border 0.2s;
 }
 
-#profile .profile-form input:focus {
+.profile-form input:focus {
     border: 1px solid #007BFF;
 }
 
@@ -283,8 +284,7 @@ body {
     cursor: pointer;
 }
 
-/* Medicine form styling — same as profile update look */
-#medicines .medicine-form {
+.medicine-form {
   margin: 20px auto;
   max-width: 500px;
   padding: 20px;
@@ -294,25 +294,26 @@ body {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-#medicines .medicine-form h3 {
+.medicine-form h3 {
   text-align: center;
   margin-bottom: 15px;
   color: #2c3e50;
 }
 
-#medicines .medicine-form form {
+.medicine-form form {
   display: flex;
   flex-direction: column;
 }
 
-#medicines .medicine-form label {
-  margin: 10px 0 5px;
-  font-weight: bold;
-  color: #34495e;
+.medicine-form label {
+    display: block;
+    margin: 10px 0 5px;
+    font-weight: bold;
+    color: #34495e;
 }
 
-#medicines .medicine-form input,
-#medicines .medicine-form select {
+.medicine-form input,
+.medicine-form select {
   padding: 10px;
   border: 1px solid #bdc3c7;
   border-radius: 5px;
@@ -321,12 +322,12 @@ body {
   transition: border 0.2s;
 }
 
-#medicines .medicine-form input:focus,
-#medicines .medicine-form select:focus {
+.medicine-form input:focus,
+.medicine-form select:focus {
   border: 1px solid #007BFF;
 }
 
-#medicines .medicine-form .save-btn {
+.medicine-form .save-btn {
   margin-top: 20px;
   padding: 12px;
   border: none;
@@ -338,7 +339,7 @@ body {
   transition: 0.3s;
 }
 
-#medicines .medicine-form .save-btn:hover {
+.medicine-form .save-btn:hover {
   background: #0056b3;
 }
 
