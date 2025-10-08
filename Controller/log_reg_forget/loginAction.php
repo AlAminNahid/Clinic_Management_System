@@ -53,7 +53,7 @@
                     echo "
                         <script>
                             alert('Patient login successful.');
-                            window.location.href = '../../View/dashboards/patient_/';
+                            window.location.href = '../../View/dashboards/patient_/patient.php';
                         </script>
                     ";
                     exit;
@@ -62,7 +62,7 @@
                     echo "
                         <script>
                             alert('Unknown role, redirecting to login.');
-                            window.location.href = '../View/login_reg_forget/login/login.php';
+                            window.location.href = '../../View/login_reg_forget/login/login.php';
                         </script>
                     ";
                 }
@@ -72,7 +72,7 @@
             echo "
                 <script>
                     alert('$validation');
-                    window.location.href = '../View/login_reg_forget/login/login.php';
+                    window.location.href = '../../View/login_reg_forget/login/login.php';
                 </script>
             ";
         }
