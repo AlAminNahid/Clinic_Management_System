@@ -22,7 +22,7 @@
                 echo "
                     <script>
                         alert('Registration Successful!');
-                        window.location.href = '../View/login_reg_forget/login/login.php';
+                        window.location.href = '../../View/login_reg_forget/login/login.php';
                     </script>
                 ";
                 exit;   
@@ -39,7 +39,7 @@
             echo "
                 <script>
                     alert('$validation');
-                    window.location.href = '../View/login_reg_forget/registration/reg.php';
+                    window.location.href = '../../View/login_reg_forget/registration/reg.php';
                 </script>
             ";
         }

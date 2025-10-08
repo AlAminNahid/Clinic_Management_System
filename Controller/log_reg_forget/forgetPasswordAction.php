@@ -20,7 +20,7 @@
                 echo "
                     <script>
                         alert('Password has been reset successfully.');
-                        window.location.href = '../View/login_reg_forget/login/login.php';
+                        window.location.href = '../../View/login_reg_forget/login/login.php';
                     </script>
                     ";
             }
@@ -36,7 +36,7 @@
             echo "
                 <script>
                     alert('$validation');
-                    window.location.href = '../View/login_reg_forget/forget_password/forgetpass.php';
+                    window.location.href = '../../View/login_reg_forget/forget_password/forgetpass.php';
                 </script>
             ";
         }
