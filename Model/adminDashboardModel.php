@@ -1,6 +1,30 @@
 <?php
 include("conn.php");
 
+function deleteDoctor($conn, $doctorID){
+    $sql = "DELETE FROM Doctor WHERE DoctorID = ?";
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, "i", $doctorID);
+
+    return mysqli_stmt_execute($stmt);
+}
+
+function editDoctor($conn, $doctorID, $newFullName, $newPhone, $newSpecialization, $newFee){
+    $sql = "UPDATE Doctor SET FullName=?, PhoneNumber=?, Specialization=?, VisitFee=? 
+            WHERE DoctorID = ?";
+    $stmt = mysqli_prepare($conn, $sql);
+
+    if(!$stmt){
+        return false;
+    }
+
+    mysqli_stmt_bind_param($stmt, "ssssd", $newFullName, $newPhone, $newSpecialization, $newFee, $doctorID);
+    $result = mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+
+    return $result;
+}
+
 function getTotalDoctors($conn){
     $sql = "SELECT COUNT(*) as total FROM Doctor";
     $result = mysqli_query($conn, $sql);

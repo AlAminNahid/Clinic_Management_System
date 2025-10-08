@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
     <link rel="stylesheet" href="style.css">
-    <script src="script.js"></script>
+    <script src="script.js?"></script>
     <script src="adminProfileFormValidation.js"></script>
     <script src="adminMedicineFormValidation.js"></script>
+    <script src="edit_delete_update.js"></script>
 </head>
 <body>
     <div class="dashboard">
@@ -87,7 +88,6 @@
                 <div class="card">
                     <div class="card-header">
                         <h2>Manage Doctors</h2>
-                        <button class="add-btn" onclick="showAddDoctorForm()">+ Add Doctor</button>
                     </div>
                     <table class="data-table">
                         <thead>
@@ -108,7 +108,6 @@
                 <div class="card">
                     <div class="card-header">
                         <h2>Manage Patients</h2>
-                        <button class="add-btn" onclick="showAddPatientForm()">+ Add Patient</button>
                     </div>
                     <table class="data-table">
                         <thead>

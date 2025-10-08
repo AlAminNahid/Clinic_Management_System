@@ -25,57 +25,6 @@ document.addEventListener("DOMContentLoaded", () => {
     fetchPatients();
     fetchAppointments();
     fetchMedicines();
-
-    const doctorList = document.getElementById("doctor-list");
-    if (doctorList) {
-        doctorList.addEventListener("click", e => {
-            if (e.target.classList.contains("delete-btn")) {
-                console.log("Delete doctor clicked");
-            } 
-            if (e.target.classList.contains("edit-btn")) {
-                console.log("Edit doctor clicked");
-            }
-        });
-    }
-
-    const patientList = document.getElementById("patient-list");
-    if (patientList) {
-        patientList.addEventListener("click", e => {
-            if (e.target.classList.contains("delete-btn")) {
-                console.log("Delete patient clicked");
-            }
-            if (e.target.classList.contains("edit-btn")) {
-                console.log("Edit patient clicked");
-            }
-        });
-    }
-
-    const appointmentList = document.getElementById("appointment-list");
-    if (appointmentList) {
-        appointmentList.addEventListener("click", e => {
-            if (e.target.classList.contains("approve-btn")) {
-                console.log("Approve appointment clicked");
-            }
-            if (e.target.classList.contains("reschedule-btn")) {
-                console.log("Reschedule appointment clicked");
-            }
-            if (e.target.classList.contains("delete-btn")) {
-                console.log("Delete appointment clicked");
-            }
-        });
-    }
-
-    const medicineList = document.getElementById("medicine-list");
-    if (medicineList) {
-        medicineList.addEventListener("click", e => {
-            if (e.target.classList.contains("toggle-btn")) {
-                console.log("Toggle medicine status clicked");
-            }
-            if (e.target.classList.contains("delete-btn")) {
-                console.log("Delete medicine clicked");
-            }
-        });
-    }
 });
 
 function fetchDashboardStats() {
@@ -112,7 +61,7 @@ function fetchDoctors() {
             tbody.innerHTML = "";
             data.forEach(doctor => {
                 tbody.innerHTML += `
-                    <tr>
+                    <tr data-id="${doctor.DoctorID}">
                         <td>${doctor.FullName || ""}</td>
                         <td>${doctor.PhoneNumber || ""}</td>
                         <td>${doctor.Specialization || ""}</td>
