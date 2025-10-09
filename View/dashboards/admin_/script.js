@@ -25,7 +25,76 @@ document.addEventListener("DOMContentLoaded", () => {
     fetchPatients();
     fetchAppointments();
     fetchMedicines();
+    fetchBackups();
 });
+
+function fetchBackups(){
+    fetch('../../../Controller/dashboard/admin/backupController.php?action=getBackupInfo')
+    .then(res => res.json())
+    .then(data => {
+        const tbody = document.getElementById("backup-list");
+
+        if(!tbody){
+            return;
+        }
+
+        tbody.innerHTML = "";
+        if(data.length === 0){
+            tbody.innerHTML = `<tr><td colspan="5">No Backup found</td></tr>`;
+            return;
+        }
+
+        data.forEach(backup => {
+            tbody.innerHTML += `
+                <tr data-id="${backup.BackupID}" data-file="${backup.FileName}">
+                    <td>${backup.BackupID}</td>
+                    <td>${backup.FileName}</td>
+                    <td>${backup.CreatedAt}</td>
+                    <td>${backup.CreatedBy}</td>
+                    <td>
+                        <button class="delete-btn">Delete</button>
+                    </td>
+                </tr>
+            `
+        });
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.addEventListener('click', function(){
+                const row = this.closest('tr');
+                const backupID = row.dataset.id;
+                const fileName = row.dataset.file;
+
+                if(confirm(`Are you sure you want to delete backup "${fileName}"?`)){
+                    deleteBackup(backupID, fileName);
+                }
+            });
+        });
+    })
+    .catch(err => console.error("Error fetching backups:", err));
+}
+
+function deleteBackup(backupID, fileName){
+    fetch(`../../../Controller/dashboard/admin/backupController.php?action=deleteBackup&backupID=${backupID}&fileName=${fileName}`)
+        .then(res => res.json())
+        .then(data => {
+            if(data.success){
+                alert("Backup deleted successfully!");
+                fetchBackups();
+            } else {
+                alert("Failed to delete backup: " + data.message);
+            }
+        })
+        .catch(err => console.error("Error deleting backup:", err));
+}
+
+function createBackup(){
+    if(!confirm("Are you sure you want to create a new backup?")){
+        return;
+    }
+
+    window.location.href = "../../../Controller/dashboard/admin/backupController.php?action=createBackup";
+
+    setTimeout(fetchBackups, 3000);
+}
 
 function fetchDashboardStats() {
     fetch('../../../Controller/dashboard/admin/dataFetchController.php?action=getDashboardStats')
@@ -87,7 +156,7 @@ function fetchPatients() {
             tbody.innerHTML = "";
             data.forEach(patient => {
                 tbody.innerHTML += `
-                    <tr>
+                    <tr data-id="${patient.PatientID}">
                         <td>${patient.FullName || ""}</td>
                         <td>${patient.PhoneNumber || ""}</td>
                         <td>${patient.Age || ""}</td>

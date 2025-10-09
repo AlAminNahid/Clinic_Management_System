@@ -29,6 +29,7 @@
                 echo "
                     <script>
                         alert('Error: Could not add medicine.');
+                        window.location.href = '../../../View/dashboards/admin_/admin.php';
                     </script>
                 ";
             }
@@ -37,6 +38,7 @@
             echo "
                 <script>
                     alert('$validation');
+                    window.location.href = '../../../View/dashboards/admin_/admin.php';
                 </script>
             ";
         }

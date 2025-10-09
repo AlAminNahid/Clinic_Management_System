@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () =>{
     const doctorList = document.getElementById("doctor-list");
+
     if (doctorList) {
         doctorList.addEventListener("click", e => {
             const doctorRow = e.target.closest("tr");
@@ -88,11 +89,90 @@ document.addEventListener("DOMContentLoaded", () =>{
     const patientList = document.getElementById("patient-list");
     if (patientList) {
         patientList.addEventListener("click", e => {
+            const patientRow = e.target.closest("tr");
+
+            if(!patientRow){
+                return;
+            }
+
             if (e.target.classList.contains("delete-btn")) {
-                console.log("Delete patient clicked");
+                const patientName = patientRow.children[0].textContent.trim();
+
+                if(confirm(`Are you sure you want to delete ${patientName}`)){
+                    fetch(`../../../Controller/dashboard/admin/edit_delete_updateController.php?action=deletePatient`, {
+                        method: "POST",
+                        headers: {"Content-Type": "application/json"},
+                        body: JSON.stringify({
+                            patientID: patientRow.dataset.id
+                        })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if(data.success){
+                            patientRow.remove();
+                            alert(`${patientName} deleted successfully.`);
+                        }
+                        else{
+                            alert(`Failed to delete patient: ` + data.message);
+                        }
+                    })
+                    .catch(err => console.error("Error:", err));
+                }
             }
             if (e.target.classList.contains("edit-btn")) {
-                console.log("Edit patient clicked");
+                const editBtn = e.target;
+                if(editBtn.textContent.trim() === "Save"){
+                    const updatedFullName = patientRow.children[0].querySelector("input").value.trim();
+                    const updatedPhone = patientRow.children[1].querySelector("input").value.trim();
+                    const updatedAge = patientRow.children[2].querySelector("input").value.trim();
+                    const updatedGender = patientRow.children[3].querySelector("input").value.trim();
+                    const updatedAddress = patientRow.children[4].querySelector("input").value.trim();
+
+                    fetch(`../../../Controller/dashboard/admin/edit_delete_updateController.php?action=editPatient`, {
+                        method: "POST",
+                        headers: {"Content-Type": "application/json"},
+                        body: JSON.stringify({
+                            patientID: patientRow.dataset.id,
+                            newFullName: updatedFullName,
+                            newPhone: updatedPhone,
+                            newAge: updatedAge,
+                            newGender: updatedGender,
+                            newAddress: updatedAddress
+                        })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if(data.success){
+                            patientRow.children[0].textContent = updatedFullName;
+                            patientRow.children[1].textContent = updatedPhone;
+                            patientRow.children[2].textContent = updatedAge;
+                            patientRow.children[3].textContent = updatedGender;
+                            patientRow.children[4].textContent = updatedAddress;
+
+                            editBtn.textContent = "Edit";
+                            alert("patient info updated successfully.");
+                        }
+                        else{
+                            alert("Failed to update patient: " + data.message);
+                        }
+                    })
+                    .catch(err => console.error("Error:", err));
+                }
+                else{
+                    const currentFullName = patientRow.children[0].textContent.trim();
+                    const currentPhone = patientRow.children[1].textContent.trim();
+                    const currentAge = patientRow.children[2].textContent.trim();
+                    const currentGender = patientRow.children[3].textContent.trim();
+                    const currentAddress = patientRow.children[4].textContent.trim();
+
+                    patientRow.children[0].innerHTML = `<input type="text" value="${currentFullName}">`;
+                    patientRow.children[1].innerHTML = `<input type="text" value="${currentPhone}">`;
+                    patientRow.children[2].innerHTML = `<input type="text" value="${currentAge}">`;
+                    patientRow.children[3].innerHTML = `<input type="text" value="${currentGender}">`;
+                    patientRow.children[4].innerHTML = `<input type="text" value="${currentAddress}">`;
+
+                    editBtn.textContent = "Save";
+                }
             }
         });
     }

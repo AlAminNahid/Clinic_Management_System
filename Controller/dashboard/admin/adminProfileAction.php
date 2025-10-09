@@ -21,6 +21,7 @@
                 echo "
                     <script>
                         alert('Profile updated successfully.');
+                        window.location.href = '../../../View/dashboards/admin_/admin.php';
                     </script>
                 ";
             }
@@ -28,6 +29,7 @@
                 echo "
                     <script>
                         alert('Error: Could not update profile.');
+                        window.location.href = '../../../View/dashboards/admin_/admin.php';
                     </script>
                 ";
             }
@@ -36,6 +38,7 @@
             echo "
                 <script>
                     alert('$validation');
+                    window.location.href = '../../../View/dashboards/admin_/admin.php';
                 </script>
             ";
         }
