@@ -26,6 +26,23 @@
                 echo json_encode(['success' => false, 'message' => 'Database error']);
             }
             break;
+
+        case 'deletePatient':
+            $patientID = $input['patientID'] ?? '';
+
+            if(!$patientID){
+                echo json_encode(['success' => false, 'message' => 'Patient ID is not specified']);
+                exit;
+            }
+            $deleted = deletePatient($conn, $patientID);
+
+            if($deleted){
+                echo json_encode(['success' => true]);
+            }
+            else{
+                echo json_encode(['success' => false, 'message' => 'Database error']);
+            }
+            break;
         
         case 'editDoctor':
             $doctorID = $input['doctorID'] ?? '';
@@ -41,6 +58,24 @@
             }
             else{
                 echo json_encode(['success' => false, 'message' => 'Could not update doctor information.']);
+            }
+            break;
+        
+        case 'editPatient':
+            $patientID = $input['patientID'] ?? '';
+            $newFullName = $input['newFullName'] ?? '';
+            $newPhone = $input['newPhone'] ?? '';
+            $newAge = $input['newAge'] ?? '';
+            $newGender = $input['newGender'] ?? '';
+            $newAddress = $input['newAddress'] ?? '';
+
+            $result = editPatient($conn, $patientID, $newFullName, $newPhone, $newAge, $newGender, $newAddress);
+
+            if($result){
+                echo json_encode(['success' => true]);
+            }
+            else{
+                echo json_encode(['success' => false, 'message' => 'Could not update patient information']);
             }
             break;
         

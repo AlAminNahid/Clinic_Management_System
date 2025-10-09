@@ -45,20 +45,6 @@
                             <p id="total-medicines"></p>
                         </div>
                     </div>
-                    <div class="card">
-                        <h2>Admin Information </h2>
-                        <table class="data-table">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Phone Number</th>
-                                </tr>
-                            </thead>
-                            <tbody id="admin-info">
-                            </tbody>
-                        </table>
-                    </div>
                 </div>
             </div>
             <div class="content-section" id="profile">
@@ -83,6 +69,20 @@
                         </form>
                     </div>
                 </div>
+                <div class="card">
+                        <h2>Admin Information </h2>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone Number</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-info">
+                            </tbody>
+                        </table>
+                    </div>
             </div>
             <div class="content-section" id="doctors">
                 <div class="card">
@@ -200,6 +200,21 @@
                     <div class="card-header">
                         <h2>Data Backup</h2>
                         <button class="add-btn" onclick="createBackup()">+ Create New Backup</button>
+                    </div>
+                    <div class="card-body">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Backup ID</th>
+                                    <th>File Name</th>
+                                    <th>Data Created</th>
+                                    <th>Created By</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody id="backup-list">
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
