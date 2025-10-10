@@ -4,7 +4,7 @@
     error_reporting(E_ALL);
 
     session_start();
-    include("../../../Model/userModel.php");
+    include("../../../Model/adminDashboardModel.php");
     include("../../Validation/dashboard/admin/adminProfileValidation.php");
 
     if($_SERVER["REQUEST_METHOD"] == "POST"){

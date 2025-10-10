@@ -178,4 +178,28 @@
 
         return $data;
     }
+
+    function updateAdminProfile($conn, $adminID, $name, $email, $phoneNumber, $password){
+        $name = mysqli_real_escape_string($conn, $name);
+        $email = mysqli_real_escape_string($conn, $email);
+        $phoneNumber = mysqli_real_escape_string($conn, $phoneNumber);
+        $adminID = (int)$adminID;
+        $password = password_hash($password, PASSWORD_DEFAULT);
+
+        $sqlAdmin = "UPDATE Admin SET FullName='$name', Email='$email', PhoneNumber='$phoneNumber'
+                     WHERE AdminID=$adminID";
+        
+        $updateAdmin = mysqli_query($conn, $sqlAdmin);
+
+        if(!$updateAdmin){
+            return false;
+        }
+
+        $sqlLogin = "UPDATE Login SET Email='$email', Password='$password'
+                     WHERE AdminID=$adminID AND Role='admin'";
+
+        $updateLogin = mysqli_query($conn, $sqlLogin);
+
+        return $updateLogin;
+    }
 ?>
