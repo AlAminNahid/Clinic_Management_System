@@ -1,21 +1,19 @@
-
-
 <?php
 session_start();
-require_once '../Model/conn.php';
-require_once '../Model/patientModel.php';
+require_once '../../Model/conn.php';
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !isset($_SESSION['user_id']) || $_SESSION['role'] !== 'patient') {
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'patient') {
     header('Content-Type: application/json');
-    echo json_encode(['success' => false, 'message' => 'Unauthorized access']);
+    echo json_encode(['success' => false, 'message' => 'Unauthorized']);
     exit();
 }
 
 $patient_id = $_SESSION['user_id'];
-//$patientModel = new PatientModel($conn);
+$appointment_id = intval($_POST['appointment_id']);
 
-if (isset($_POST['action']) && $_POST['action'] === 'cancel' && isset($_POST['appointment_id'])) {
-    $appointment_id = intval($_POST
-
-
-
+if (cancelAppointment($conn, $appointment_id, $patient_id)) {
+    echo json_encode(['success' => true, 'message' => 'Appointment cancelled successfully']);
+} else {
+    echo json_encode(['success' => false, 'message' => 'Failed to cancel appointment']);
+}
+?>

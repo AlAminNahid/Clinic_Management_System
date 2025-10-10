@@ -1,60 +1,74 @@
-// Navigation
+// Main dashboard functionality
 document.addEventListener('DOMContentLoaded', function() {
-    // Navigation functionality
+    initializeNavigation();
+    initializeFormHandlers();
+    setMinimumDate();
+});
+
+// Navigation functionality
+function initializeNavigation() {
     const navLinks = document.querySelectorAll('.nav-link');
     const sections = document.querySelectorAll('.dashboard-section');
-
+    
     navLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
             
             // Remove active class from all links and sections
-            navLinks.forEach(l => l.classList.remove('active'));
-            sections.forEach(s => s.classList.remove('active'));
+            navLinks.forEach(nav => nav.classList.remove('active'));
+            sections.forEach(section => section.classList.remove('active'));
             
             // Add active class to clicked link
             this.classList.add('active');
             
             // Show corresponding section
             const targetId = this.getAttribute('href').substring(1);
-            const targetSection = document.getElementById(targetId);
-            if (targetSection) {
-                targetSection.classList.add('active');
-            }
+            document.getElementById(targetId).classList.add('active');
         });
     });
+}
 
-    // Profile form submission
+// Form handlers
+function initializeFormHandlers() {
+    // Profile form
     const profileForm = document.getElementById('profileForm');
     if (profileForm) {
         profileForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            updateProfile();
+            if (PatientValidation.validateProfileForm()) {
+                updateProfile();
+            }
         });
     }
-
-    // Appointment form submission
+    
+    // Appointment form
     const appointmentForm = document.getElementById('appointmentForm');
     if (appointmentForm) {
         appointmentForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            bookAppointment();
+            if (PatientValidation.validateAppointmentForm()) {
+                bookAppointment();
+            }
         });
     }
+}
 
-    // Set minimum date for appointment to today
+// Set minimum date for appointment booking
+function setMinimumDate() {
     const dateInput = document.getElementById('appointmentDate');
     if (dateInput) {
         const today = new Date().toISOString().split('T')[0];
         dateInput.setAttribute('min', today);
     }
-});
+}
 
-// Update Profile
+// Update profile function
 function updateProfile() {
     const formData = new FormData(document.getElementById('profileForm'));
     
-    fetch('../Controller/patient/updateProfileAction.php', {
+    showNotification('Updating profile...', 'info');
+    
+    fetch('../../Controller/patient/updateProfileAction.php', {
         method: 'POST',
         body: formData
     })
@@ -72,11 +86,13 @@ function updateProfile() {
     });
 }
 
-// Book Appointment
+// Book appointment function
 function bookAppointment() {
     const formData = new FormData(document.getElementById('appointmentForm'));
     
-    fetch('../Controller/patient/bookAppointmentAction.php', {
+    showNotification('Booking appointment...', 'info');
+    
+    fetch('../../Controller/patient/bookAppointmentAction.php', {
         method: 'POST',
         body: formData
     })
@@ -85,7 +101,7 @@ function bookAppointment() {
         if (data.success) {
             showNotification('Appointment booked successfully!', 'success');
             document.getElementById('appointmentForm').reset();
-            // Refresh appointments list
+            // Refresh page after 2 seconds to show new appointment
             setTimeout(() => {
                 location.reload();
             }, 2000);
@@ -99,7 +115,7 @@ function bookAppointment() {
     });
 }
 
-// Cancel Appointment
+// Cancel appointment function
 function cancelAppointment(appointmentId) {
     if (!confirm('Are you sure you want to cancel this appointment?')) {
         return;
@@ -109,7 +125,9 @@ function cancelAppointment(appointmentId) {
     formData.append('appointment_id', appointmentId);
     formData.append('action', 'cancel');
 
-    fetch('../Controller/patient/patientAction.php', {
+    showNotification('Cancelling appointment...', 'info');
+
+    fetch('../../Controller/patient/patientAction.php', {
         method: 'POST',
         body: formData
     })
@@ -117,6 +135,7 @@ function cancelAppointment(appointmentId) {
     .then(data => {
         if (data.success) {
             showNotification('Appointment cancelled successfully!', 'success');
+            // Refresh page after 2 seconds to reflect changes
             setTimeout(() => {
                 location.reload();
             }, 2000);
@@ -130,54 +149,18 @@ function cancelAppointment(appointmentId) {
     });
 }
 
-// Notification System
+// Notification system
 function showNotification(message, type = 'info') {
+    // Remove existing notifications
+    const existingNotifications = document.querySelectorAll('.notification');
+    existingNotifications.forEach(notification => notification.remove());
+
     const notification = document.createElement('div');
     notification.className = `notification notification-${type}`;
     notification.innerHTML = `
         <span>${message}</span>
         <button onclick="this.parentElement.remove()">&times;</button>
     `;
-
-    // Add styles if not already added
-    if (!document.querySelector('#notification-styles')) {
-        const styles = document.createElement('style');
-        styles.id = 'notification-styles';
-        styles.textContent = `
-            .notification {
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                padding: 1rem 1.5rem;
-                border-radius: 5px;
-                color: white;
-                z-index: 1000;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                min-width: 300px;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-                animation: slideIn 0.3s ease-out;
-            }
-            .notification-success { background: #28a745; }
-            .notification-error { background: #dc3545; }
-            .notification-info { background: #17a2b8; }
-            .notification-warning { background: #ffc107; color: #212529; }
-            .notification button {
-                background: none;
-                border: none;
-                color: inherit;
-                font-size: 1.2rem;
-                cursor: pointer;
-                margin-left: 1rem;
-            }
-            @keyframes slideIn {
-                from { transform: translateX(100%); opacity: 0; }
-                to { transform: translateX(0); opacity: 1; }
-            }
-        `;
-        document.head.appendChild(styles);
-    }
 
     document.body.appendChild(notification);
 
