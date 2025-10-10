@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !isset($_SESSION['user_id']) || $_S
 }
 
 $patient_id = $_SESSION['user_id'];
-$patientModel = new PatientModel($conn);
+//$patientModel = new PatientModel($conn);
 
 if (isset($_POST['action']) && $_POST['action'] === 'cancel' && isset($_POST['appointment_id'])) {
     $appointment_id = intval($_POST
