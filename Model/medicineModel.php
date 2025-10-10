@@ -1,6 +1,8 @@
 <?php
     include("conn.php");
 
+    $conn = getConnection();
+
     function addMedicine($conn, $name, $type, $strength, $manufacturer, $status){
         $name = mysqli_real_escape_string($conn, $name);
         $type = mysqli_real_escape_string($conn, $type);
