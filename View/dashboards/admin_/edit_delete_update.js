@@ -180,14 +180,28 @@ document.addEventListener("DOMContentLoaded", () =>{
     const appointmentList = document.getElementById("appointment-list");
     if (appointmentList) {
         appointmentList.addEventListener("click", e => {
-            if (e.target.classList.contains("approve-btn")) {
-                console.log("Approve appointment clicked");
+            const appRow = e.target.closest("tr");
+
+            if(!appRow){
+                return;
             }
-            if (e.target.classList.contains("reschedule-btn")) {
-                console.log("Reschedule appointment clicked");
+
+            const appointmentID = appRow.children[0].textContent.trim();
+
+            if (e.target.classList.contains("approve-btn")) {
+                if(confirm("Are you sure you want to approve this appointments?")){
+                    updateAppointmentStatus(appointmentID, "Approved", appRow);
+                }
+            }
+            if (e.target.classList.contains("cancel-btn")) {
+                if(confirm("Are you sure you want to cancel this appointment?")){
+                    updateAppointmentStatus(appointmentID, "Cancelled", appRow);
+                }
             }
             if (e.target.classList.contains("delete-btn")) {
-                console.log("Delete appointment clicked");
+                if(confirm("Are you sure you want to delete this appointment?")){
+                    deleteAppointment(appointmentID, appRow);
+                }
             }
         });
     }
@@ -195,12 +209,110 @@ document.addEventListener("DOMContentLoaded", () =>{
     const medicineList = document.getElementById("medicine-list");
     if (medicineList) {
         medicineList.addEventListener("click", e => {
-            if (e.target.classList.contains("toggle-btn")) {
-                console.log("Toggle medicine status clicked");
-            }
+            const medRow = e.target.closest("tr");
+
             if (e.target.classList.contains("delete-btn")) {
-                console.log("Delete medicine clicked");
+                if(!medRow){
+                    return;
+                }
+
+                const medicineName = medRow.children[0].textContent.trim();
+
+                if(confirm(`Are you sure you want to delete ${medicineName}`)){
+                    fetch(`../../../Controller/dashboard/admin/edit_delete_updateController.php?action=deleteMedicine`, {
+                        method: "POST",
+                        headers: {"Content-Type": "application/json"},
+                        body: JSON.stringify({
+                            medicineName: medicineName
+                        })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if(data.success){
+                            medRow.remove();
+                            alert(`${medicineName} deleted successfully`);
+                        }
+                        else{
+                            alert("Failed to delete medicine: " + data.message);
+                        }
+                    })
+                    .catch(err => console.error("Error:", err));
+                }
+            }
+            if (e.target.classList.contains("toggle-btn")) {
+                const medicineName = medRow.children[0].textContent.trim();
+                const currentStatus = medRow.children[4].textContent.trim();
+                const newStatus = currentStatus === "Active" ? "Inactive" : "Active";
+
+                if(confirm(`Are you sure you want to ${newStatus === "Active" ? "activate" : "deactivate"} ${medicineName}`)){
+                    fetch(`../../../Controller/dashboard/admin/edit_delete_updateController.php?action=toggleMedicineStatus`, {
+                        method: "POST",
+                        headers: {"Content-Type": "application/json"},
+                        body: JSON.stringify({
+                            medicineName: medicineName,
+                            newStatus: newStatus
+                        })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if(data.success){
+                            medRow.children[4].textContent = newStatus;
+                            e.target.textContent = newStatus === "Active" ? "Deactivate" : "Activate";
+                            e.target.classList.toggle("activate-btn", newStatus !== "Active");
+                            e.target.classList.toggle("deactivate-btn", newStatus === "Active");
+                            
+                            alert(`${medicineName} is now ${newStatus}.`);
+                        }
+                        else{
+                            alert("Failed to update status: " + data.message);
+                        }
+                    })
+                    .catch(err => console.error("Error:", err));
+                }
             }
         });
     }
 });
+
+function updateAppointmentStatus(appointmentID, newStatus, row){
+    fetch(`../../../Controller/dashboard/admin/edit_delete_updateController.php?action=updateAppointmentStatus`, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            appointmentID,
+            newStatus
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if(data.success){
+            row.children[5].textContent = newStatus;
+            alert(`Appointment status updated to ${newStatus}`);
+        }
+        else{
+            alert("Failed to update appointment: " + data.message);
+        }
+    })
+    .catch(err => console.error("Error:", err));
+}
+
+function deleteAppointment(appointmentID, row){
+    fetch(`../../../Controller/dashboard/admin/edit_delete_updateController.php?action=deleteAppointment`, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            appointmentID
+        })
+    })
+    .then(res => res.json)
+    .then(data => {
+        if(data.success){
+            row.remove();
+            alert("Appointment deleted successfully.");
+        }
+        else{
+            alert("Failed to delete appointment: " + data.message);
+        }
+    })
+    .catch(err => console.error("Error:", err));
+}

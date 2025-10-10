@@ -116,7 +116,7 @@ body {
     background: #0056b3;
 }
 
-.delete-btn {
+.delete-btn, .backup-delete-btn {
     background: #dc3545;
     color: white;
     border: none;
@@ -126,7 +126,7 @@ body {
     transition: background 0.3s;
 }
 
-.delete-btn:hover {
+.delete-btn:hover, .backup-delete-btn:hover {
     background: #b02a37;
 }
 
@@ -274,7 +274,7 @@ body {
     cursor: pointer;
 }
 
-.reschedule-btn {
+.cancel-btn {
     background: #ffc107;
     color: white;
     border: none;

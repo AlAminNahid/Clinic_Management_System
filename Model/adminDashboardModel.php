@@ -56,6 +56,21 @@
         return mysqli_stmt_execute($stmt);
     }
 
+    function deleteMedicine($conn, $medicineName){
+        $sql = "DELETE FROM Medicine WHERE Name = ?";
+        $stmt = mysqli_prepare($conn, $sql);
+
+        if(!$stmt){
+            return false;
+        }
+
+        mysqli_stmt_bind_param($stmt, "s", $medicineName);
+        $result = mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+
+        return $result;
+    }
+
     function editDoctor($conn, $doctorID, $newFullName, $newPhone, $newSpecialization, $newFee){
         $sql = "UPDATE Doctor SET FullName=?, PhoneNumber=?, Specialization=?, VisitFee=? 
                 WHERE DoctorID = ?";
@@ -82,6 +97,21 @@
         }
 
         mysqli_stmt_bind_param($stmt, "ssissi", $newFullName, $newPhone, $newAge, $newGender, $newAddress, $patientID);
+        $result = mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+
+        return $result;
+    }
+
+    function updateMedicineStatus($conn, $medicineName, $newStatus){
+        $sql = "UPDATE Medicine SET Status = ? WHERE Name = ?";
+        $stmt = mysqli_prepare($conn, $sql);
+
+        if(!$stmt){
+            return false;
+        }
+
+        mysqli_stmt_bind_param($stmt, "ss", $newStatus, $medicineName);
         $result = mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
 
@@ -155,7 +185,7 @@
     }
 
     function getAppointments($conn) {
-        $sql = "SELECT a.AppointmentID, p.FullName as PatientName, d.FullName as DoctorName, a.Date, a.Time, a.Status
+        $sql = "SELECT a.AppointmentID, p.FullName as PatientName, d.FullName as DoctorName, a.Date, a.Time, a.Reason, a.Status
                 FROM Appointment a
                 JOIN Patient p ON a.PatientID = p.PatientID
                 JOIN Doctor d ON a.DoctorID = d.DoctorID";
@@ -179,5 +209,35 @@
         }
 
         return $data;
+    }
+
+    function updateAppointmentStatus($conn, $appointmentID, $newStatus){
+        $sql = "UPDATE Appointment SET Status = ? WHERE AppointmentID = ?";
+        $stmt = mysqli_prepare($conn, $sql);
+
+        if(!$stmt){
+            return false;
+        }
+
+        mysqli_stmt_bind_param($stmt, "si", $newStatus, $appointmentID);
+        $result = mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+
+        return $result;
+    }
+
+    function deleteAppointment($conn, $appointmentID){
+        $sql = "DELETE FROM Appointment WHERE AppointmentID = ?";
+        $stmt = mysqli_prepare($conn, $sql);
+
+        if(!$stmt){
+            return false;
+        }
+
+        mysqli_stmt_bind_param($stmt, "i", $appointmentID);
+        $result = mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+
+        return $result;
     }
 ?>

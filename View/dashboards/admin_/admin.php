@@ -26,7 +26,8 @@
         <div class="content">
             <div class="content-section active" id="dashboard">
                 <div class="card">
-                    <h2>Welcome Admin</h2>
+                    <h2 id="welcome-message">
+                    </h2>
                     <div class="stats-grid">
                         <div class="stat-box">
                             <h3>Total Doctors</h3>
@@ -137,6 +138,7 @@
                                 <th>Patient</th>
                                 <th>Doctor</th>
                                 <th>Date/Time</th>
+                                <th>Reason</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>

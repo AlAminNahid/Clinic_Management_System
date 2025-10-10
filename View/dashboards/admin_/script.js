@@ -52,7 +52,7 @@ function fetchBackups(){
                     <td>${backup.CreatedAt}</td>
                     <td>${backup.CreatedBy}</td>
                     <td>
-                        <button class="delete-btn">Delete</button>
+                        <button class="backup-delete-btn">Delete</button>
                     </td>
                 </tr>
             `
@@ -114,7 +114,12 @@ function fetchDashboardStats() {
                         <td>${admin.Email || ""}</td>
                         <td>${admin.PhoneNumber || ""}</td>
                     </tr>
-                `
+                `;
+
+                const welcomeMessage = document.getElementById('welcome-message');
+                if(welcomeMessage){
+                    welcomeMessage.textContent = `Welcome ${admin.FullName || "Admin"}`;
+                }
             }
         });
 }
@@ -177,6 +182,7 @@ function fetchAppointments() {
         .then(res => res.json())
         .then(data => {
             const tbody = document.getElementById("appointment-list");
+
             if (!tbody) {
                 return;
             } 
@@ -188,10 +194,11 @@ function fetchAppointments() {
                         <td>${app.PatientName || ""}</td>
                         <td>${app.DoctorName || ""}</td>
                         <td>${app.Date || ""} ${app.Time || ""}</td>
+                        <td>${app.Reason || ""}</td>
                         <td>${app.Status || ""}</td>
                         <td>
                             <button class="approve-btn">Approve</button>
-                            <button class="reschedule-btn">Reschedule</button>
+                            <button class="cancel-btn">Cancel</button>
                             <button class="delete-btn">Delete</button>
                         </td>
                     </tr>

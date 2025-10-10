@@ -43,6 +43,19 @@
                 echo json_encode(['success' => false, 'message' => 'Database error']);
             }
             break;
+
+        case 'deleteMedicine':
+            $medicineName = $input['medicineName'] ?? '';
+
+            if(!$medicineName){
+                echo json_encode(['success' => false, 'message' => 'Medicine name not specified']);
+                exit;
+            }
+
+            $deleted = deleteMedicine($conn, $medicineName);
+            echo json_encode(['success' => $deleted, 'message' => $deleted ? 'Medicine deleted' : 'Database error']);
+            break;
+            
         
         case 'editDoctor':
             $doctorID = $input['doctorID'] ?? '';
@@ -77,6 +90,44 @@
             else{
                 echo json_encode(['success' => false, 'message' => 'Could not update patient information']);
             }
+            break;
+
+        case 'toggleMedicineStatus':
+            $medicineName = $input['medicineName'] ?? '';
+            $newStatus = $input['newStatus'] ?? '';
+
+            if(!$medicineName || !$newStatus){
+                echo json_encode(['success' => false, 'message' => 'Missing parameters']);
+                exit;
+            }
+
+            $result = updateMedicineStatus($conn, $medicineName, $newStatus);
+            echo json_encode(['success' => $result, 'message' => $result ? 'Status updated' : 'Failed to update status']);
+            break;
+
+        case 'updateAppointmentStatus':
+            $appointmentID = $input['appointmentID'] ?? '';
+            $newStatus = $input['newStatus'] ?? '';
+
+            if(!$appointmentID || !$newStatus){
+                echo json_encode(['success' => false, 'message' => 'Missing paremeters']);
+                exit;
+            }
+
+            $result = updateAppointmentStatus($conn, $appointmentID, $newStatus);
+            echo json_encode(['success' => $result, 'message' => $result ? 'Status updated' : 'Failed to update status']);
+            break;
+
+        case 'deleteAppointment':
+            $appointmentID = $input['appointmentID'] ?? '';
+
+            if(!$appointmentID){
+                echo json_encode(['success' => false, 'message' => 'Appointment ID not specified']);
+                exit;
+            }
+
+            $result = deleteAppointment($conn, $appointmentID);
+            echo json_encode(['success' => $result, 'message' => $result ? 'Appointment deleted' : 'Failed to delete appointment']);
             break;
         
         default:
