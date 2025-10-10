@@ -3,7 +3,7 @@ function getConnection() {
     $servername = "localhost";
     $username = "root";
     $password = "";
-    $dbname = "clinic_management_system";
+    $dbname = "Clinic_Management_System";
 
     $conn = mysqli_connect($servername, $username, $password, $dbname);
 

@@ -1,31 +1,21 @@
+
+
 <?php
 session_start();
-require_once '../../Model/conn.php';
-require_once '../../Model/patientModel.php';
+require_once '../Model/conn.php';
+require_once '../Model/patientModel.php';
 
-if (!isset($_SESSION['PatientID']) || ($_SESSION['role'] ?? '') !== 'patient') {
-    header("Location: ../../login_reg_forget/login/login.php");
-    exit;
+if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !isset($_SESSION['user_id']) || $_SESSION['role'] !== 'patient') {
+    header('Content-Type: application/json');
+    echo json_encode(['success' => false, 'message' => 'Unauthorized access']);
+    exit();
 }
 
-$patientID = (int)$_SESSION['PatientID'];
+$patient_id = $_SESSION['user_id'];
+//$patientModel = new PatientModel($conn);
 
-// Create model instance
-$patientModel = new PatientModel();
+if (isset($_POST['action']) && $_POST['action'] === 'cancel' && isset($_POST['appointment_id'])) {
+    $appointment_id = intval($_POST
 
-// Get all data for the dashboard
-$data = [
-    'profile' => $patientModel->getPatientProfile($patientID),
-    'appointments' => $patientModel->getPatientAppointments($patientID),
-    'doctors' => $patientModel->getAllDoctors(),
-    'prescriptions' => $patientModel->getPatientPrescriptions($patientID)
-];
 
-// Pass data to view via GLOBALS (as your view expects)
-foreach ($data as $key => $value) {
-    $GLOBALS[$key] = $value;
-}
 
-// Include the view
-include '../../View/dashboards/patient/patient.php';
-?>
