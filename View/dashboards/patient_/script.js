@@ -1,202 +1,190 @@
-// Patient Dashboard JavaScript
+// Navigation
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize dashboard
-    initDashboard();
-    
-    // Set today's date as minimum for appointment date
-    setMinDateForAppointment();
-    
-    // Add form validation
-    initFormValidation();
-});
+    // Navigation functionality
+    const navLinks = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll('.dashboard-section');
 
-// Initialize dashboard functionality
-function initDashboard() {
-    // Show default section (dashboard)
-    showSection('dashboard');
-    
-    // Add active class to current section in URL hash
-    const hash = window.location.hash.substring(1);
-    if (hash && document.getElementById(hash)) {
-        showSection(hash);
-    }
-}
-
-// Show/hide sections
-function showSection(sectionId) {
-    // Hide all sections
-    document.querySelectorAll('.section').forEach(section => {
-        section.style.display = 'none';
-        section.classList.remove('active');
-    });
-    
-    // Show selected section
-    const targetSection = document.getElementById(sectionId);
-    if (targetSection) {
-        targetSection.style.display = 'block';
-        targetSection.classList.add('active');
-    }
-    
-    // Update navigation active state
-    document.querySelectorAll('.nav a').forEach(link => {
-        link.classList.remove('active');
-    });
-    
-    const activeLink = document.querySelector(`[data-target="${sectionId}"]`);
-    if (activeLink) {
-        activeLink.classList.add('active');
-    }
-    
-    // Update URL hash
-    window.location.hash = sectionId;
-    
-    // Smooth scroll to top
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-// Set minimum date for appointment booking (today)
-function setMinDateForAppointment() {
-    const dateInput = document.querySelector('input[type="date"][name="Date"]');
-    if (dateInput) {
-        const today = new Date().toISOString().split('T')[0];
-        dateInput.setAttribute('min', today);
-        
-        // If no value set, set today's date as default
-        if (!dateInput.value) {
-            dateInput.value = today;
-        }
-    }
-}
-
-// Initialize form validation
-function initFormValidation() {
-    const forms = document.querySelectorAll('form');
-    
-    forms.forEach(form => {
-        form.addEventListener('submit', function(e) {
-            if (!validateForm(this)) {
-                e.preventDefault();
+    navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Remove active class from all links and sections
+            navLinks.forEach(l => l.classList.remove('active'));
+            sections.forEach(s => s.classList.remove('active'));
+            
+            // Add active class to clicked link
+            this.classList.add('active');
+            
+            // Show corresponding section
+            const targetId = this.getAttribute('href').substring(1);
+            const targetSection = document.getElementById(targetId);
+            if (targetSection) {
+                targetSection.classList.add('active');
             }
         });
     });
+
+    // Profile form submission
+    const profileForm = document.getElementById('profileForm');
+    if (profileForm) {
+        profileForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            updateProfile();
+        });
+    }
+
+    // Appointment form submission
+    const appointmentForm = document.getElementById('appointmentForm');
+    if (appointmentForm) {
+        appointmentForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            bookAppointment();
+        });
+    }
+
+    // Set minimum date for appointment to today
+    const dateInput = document.getElementById('appointmentDate');
+    if (dateInput) {
+        const today = new Date().toISOString().split('T')[0];
+        dateInput.setAttribute('min', today);
+    }
+});
+
+// Update Profile
+function updateProfile() {
+    const formData = new FormData(document.getElementById('profileForm'));
+    
+    fetch('../Controller/patient/updateProfileAction.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showNotification('Profile updated successfully!', 'success');
+        } else {
+            showNotification(data.message || 'Error updating profile', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showNotification('Network error occurred', 'error');
+    });
 }
 
-// Form validation function
-function validateForm(form) {
-    let isValid = true;
-    const inputs = form.querySelectorAll('input[required], select[required], textarea[required]');
+// Book Appointment
+function bookAppointment() {
+    const formData = new FormData(document.getElementById('appointmentForm'));
     
-    // Clear previous error states
-    clearErrorStates(form);
-    
-    inputs.forEach(input => {
-        if (!input.value.trim()) {
-            markFieldAsError(input, 'This field is required');
-            isValid = false;
+    fetch('../Controller/patient/bookAppointmentAction.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showNotification('Appointment booked successfully!', 'success');
+            document.getElementById('appointmentForm').reset();
+            // Refresh appointments list
+            setTimeout(() => {
+                location.reload();
+            }, 2000);
+        } else {
+            showNotification(data.message || 'Error booking appointment', 'error');
         }
-        
-        // Email validation
-        if (input.type === 'email' && input.value.trim()) {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(input.value)) {
-                markFieldAsError(input, 'Please enter a valid email address');
-                isValid = false;
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showNotification('Network error occurred', 'error');
+    });
+}
+
+// Cancel Appointment
+function cancelAppointment(appointmentId) {
+    if (!confirm('Are you sure you want to cancel this appointment?')) {
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('appointment_id', appointmentId);
+    formData.append('action', 'cancel');
+
+    fetch('../Controller/patient/patientAction.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showNotification('Appointment cancelled successfully!', 'success');
+            setTimeout(() => {
+                location.reload();
+            }, 2000);
+        } else {
+            showNotification(data.message || 'Error cancelling appointment', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showNotification('Network error occurred', 'error');
+    });
+}
+
+// Notification System
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.innerHTML = `
+        <span>${message}</span>
+        <button onclick="this.parentElement.remove()">&times;</button>
+    `;
+
+    // Add styles if not already added
+    if (!document.querySelector('#notification-styles')) {
+        const styles = document.createElement('style');
+        styles.id = 'notification-styles';
+        styles.textContent = `
+            .notification {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 1rem 1.5rem;
+                border-radius: 5px;
+                color: white;
+                z-index: 1000;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                min-width: 300px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                animation: slideIn 0.3s ease-out;
             }
-        }
-        
-        // Date validation for appointments
-        if (input.type === 'date' && input.name === 'Date' && input.value) {
-            const selectedDate = new Date(input.value);
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            
-            if (selectedDate < today) {
-                markFieldAsError(input, 'Appointment date cannot be in the past');
-                isValid = false;
+            .notification-success { background: #28a745; }
+            .notification-error { background: #dc3545; }
+            .notification-info { background: #17a2b8; }
+            .notification-warning { background: #ffc107; color: #212529; }
+            .notification button {
+                background: none;
+                border: none;
+                color: inherit;
+                font-size: 1.2rem;
+                cursor: pointer;
+                margin-left: 1rem;
             }
-        }
-    });
-    
-    return isValid;
-}
-
-// Mark field as having error
-function markFieldAsError(field, message) {
-    field.style.borderColor = '#b02a2a';
-    field.style.boxShadow = '0 0 0 3px rgba(176, 42, 42, 0.1)';
-    
-    // Create error message element
-    const errorElement = document.createElement('div');
-    errorElement.className = 'field-error';
-    errorElement.style.color = '#b02a2a';
-    errorElement.style.fontSize = '12px';
-    errorElement.style.marginTop = '4px';
-    errorElement.textContent = message;
-    
-    field.parentNode.appendChild(errorElement);
-}
-
-// Clear error states from form
-function clearErrorStates(form) {
-    const errorElements = form.querySelectorAll('.field-error');
-    errorElements.forEach(element => element.remove());
-    
-    const inputs = form.querySelectorAll('input, select, textarea');
-    inputs.forEach(input => {
-        input.style.borderColor = '';
-        input.style.boxShadow = '';
-    });
-}
-
-// Auto-hide success/error messages after 5 seconds
-function autoHideMessages() {
-    const messages = document.querySelectorAll('.success, .error');
-    messages.forEach(message => {
-        setTimeout(() => {
-            message.style.opacity = '0';
-            message.style.transition = 'opacity 0.5s ease';
-            setTimeout(() => message.remove(), 500);
-        }, 5000);
-    });
-}
-
-// Initialize auto-hide for messages
-if (document.querySelector('.success, .error')) {
-    autoHideMessages();
-}
-
-// Enhanced appointment time validation
-function validateAppointmentTime(timeInput, dateInput) {
-    if (!timeInput || !dateInput) return;
-    
-    timeInput.addEventListener('change', function() {
-        const selectedDate = new Date(dateInput.value);
-        const selectedTime = this.value;
-        
-        if (selectedDate && selectedTime) {
-            const selectedDateTime = new Date(selectedDate);
-            const [hours, minutes] = selectedTime.split(':');
-            selectedDateTime.setHours(parseInt(hours), parseInt(minutes));
-            
-            const now = new Date();
-            
-            // Check if selected time is in the past
-            if (selectedDateTime < now) {
-                markFieldAsError(this, 'Selected time is in the past');
-            } else {
-                clearErrorStates(this.form);
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
             }
+        `;
+        document.head.appendChild(styles);
+    }
+
+    document.body.appendChild(notification);
+
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+        if (notification.parentElement) {
+            notification.remove();
         }
-    });
+    }, 5000);
 }
-
-// Initialize enhanced time validation
-const timeInput = document.querySelector('input[type="time"][name="Time"]');
-const dateInput = document.querySelector('input[type="date"][name="Date"]');
-if (timeInput && dateInput) {
-    validateAppointmentTime(timeInput, dateInput);
-}
-
-// Export functions for global access (if needed)
-window.showSection = showSection;
-window.validateForm = validateForm;
