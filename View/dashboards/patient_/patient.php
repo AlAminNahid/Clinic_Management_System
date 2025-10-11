@@ -1,17 +1,3 @@
-<?php
-session_start();
-require_once '../../Model/conn.php';
-require_once '../../Model/patientModel.php';
-
-// Check if user is logged in as patient
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'patient') {
-    header("Location: ../../home_page/login_reg_forget/index.php");
-    exit();
-}
-
-$patient_id = $_SESSION['user_id'];
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
