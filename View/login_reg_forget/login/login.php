@@ -1,4 +1,24 @@
-<!DOCTYPE html>
+<?php
+    session_start();
+
+    if(isset($_SESSION['admin_id'])){
+        header("Location: ../../dashboards/admin_/admin.php");
+        exit();
+    }
+
+    if(isset($_GET['expired']) && $_GET['expired'] == 1){
+        echo "
+            <script>
+                alert('Your session has expired. Please log in again.');
+                if (window.history.replaceState) {
+                    window.history.replaceState(null, null, window.location.pathname);
+                }
+            </script>
+        ";
+    }
+?>
+
+<!DOCTYPE html> 
 <html lang="en">
     <head>
         <meta charset="UTF-8">
