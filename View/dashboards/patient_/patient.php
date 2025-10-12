@@ -5,191 +5,151 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Patient Dashboard</title>
     <link rel="stylesheet" href="style.css">
+    <script src="validation.js"></script>
 </head>
 <body>
-    <div class="dashboard">
-        <div class="menu">
-            <h2 class="menu-title">Patient Panel</h2>
-            <button class="menu-btn active" data-target="dashboard">Dashboard</button>
-            <button class="menu-btn" data-target="profile">My Profile</button>
-            <button class="menu-btn" data-target="appointments">My Appointments</button>
-            <button class="menu-btn" data-target="prescriptions">My Prescriptions</button>
-            <button class="menu-btn" data-target="book-appointment">Book Appointment</button>
-            <button class="menu-btn" onclick="confirmLogout()">Logout</button>
-        </div>
-        <div class="content">
-            <!-- Dashboard Section -->
-            <div class="content-section active" id="dashboard">
-                <div class="card">
-                    <h2>Welcome Patient</h2>
-                    <div class="stats-grid">
-                        <div class="stat-box">
-                            <h3>Upcoming Appointments</h3>
-                            <p id="upcoming-appointments">0</p>
-                        </div>
-                        <div class="stat-box">
-                            <h3>Total Prescriptions</h3>
-                            <p id="total-prescriptions">0</p>
-                        </div>
-                        <div class="stat-box">
-                            <h3>Total Appointments</h3>
-                            <p id="total-appointments">0</p>
-                        </div>
-                        <div class="stat-box">
-                            <h3>Last Visit</h3>
-                            <p id="last-visit">No visits</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Profile Section -->
-            <div class="content-section" id="profile">
-                <div class="card">
-                    <h2>Patient Profile</h2>
-                    <div class="profile-form">
-                        <h3>Update your profile</h3>
-                        <form id="profileForm" method="POST">
-                            <label for="fullname">Full Name</label>
-                            <input type="text" id="fullname" name="fullname" placeholder="Enter your full name">
-
-                            <label for="phone">Phone Number</label>
-                            <input type="text" id="phone" name="phone" placeholder="Enter your phone number">
-
-                            <label for="age">Age</label>
-                            <input type="number" id="age" name="age" placeholder="Enter your age">
-
-                            <label for="gender">Gender</label>
-                            <select id="gender" name="gender">
-                                <option value="">Select gender</option>
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                                <option value="Other">Other</option>
-                            </select>
-
-                            <label for="address">Address</label>
-                            <textarea id="address" name="address" placeholder="Enter your address" rows="3"></textarea>
-
-                            <button type="submit" class="save-btn">Save Changes</button>
-                        </form>
-                    </div>
-                </div>
-                <div class="card">
-                    <h2>Profile Information</h2>
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Phone Number</th>
-                                <th>Age</th>
-                                <th>Gender</th>
-                                <th>Address</th>
-                            </tr>
-                        </thead>
-                        <tbody id="patient-info">
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Appointments Section -->
-            <div class="content-section" id="appointments">
-                <div class="card">
-                    <div class="card-header">
-                        <h2>My Appointments</h2>
-                        <div class="search-box">
-                            <input type="text" id="search-appointments" placeholder="Search appointments...">
-                            <button class="search-btn" onclick="searchAppointments()">Search</button>
-                        </div>
-                    </div>
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Time</th>
-                                <th>Doctor</th>
-                                <th>Specialization</th>
-                                <th>Status</th>
-                                <th>Reason</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="appointment-list">
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Prescriptions Section -->
-            <div class="content-section" id="prescriptions">
-                <div class="card">
-                    <div class="card-header">
-                        <h2>My Prescriptions</h2>
-                    </div>
-                    <div class="prescriptions-container" id="prescriptions-list">
-                        <!-- Prescriptions will be loaded here -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- Book Appointment Section -->
-            <div class="content-section" id="book-appointment">
-                <div class="card">
-                    <div class="card-header">
-                        <h2>Book New Appointment</h2>
-                    </div>
-                    <div class="appointment-form">
-                        <form id="appointmentForm" method="POST">
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="doctor">Select Doctor</label>
-                                    <select id="doctor" name="doctor" required>
-                                        <option value="">Choose a doctor...</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="appointment-date">Date</label>
-                                    <input type="date" id="appointment-date" name="appointment-date" required>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="appointment-time">Time</label>
-                                    <input type="time" id="appointment-time" name="appointment-time" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="doctor-fee">Doctor's Fee</label>
-                                    <input type="text" id="doctor-fee" readonly>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="reason">Reason for Visit</label>
-                                <textarea id="reason" name="reason" placeholder="Describe your symptoms or reason for appointment..." rows="4" required></textarea>
-                            </div>
-                            <button type="submit" class="save-btn">Book Appointment</button>
-                        </form>
-                    </div>
-                </div>
-                <div class="card">
-                    <h2>Available Doctors</h2>
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Specialization</th>
-                                <th>Fee</th>
-                                <th>Available Days</th>
-                            </tr>
-                        </thead>
-                        <tbody id="doctors-list">
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+<div class="dashboard">
+    <!-- Sidebar Menu -->
+    <div class="menu">
+        <h2 class="menu-title">Patient Panel</h2>
+        <button class="menu-btn active" data-target="dashboard">Dashboard</button>
+        <button class="menu-btn" data-target="profile">My Profile</button>
+        <button class="menu-btn" data-target="appointments">My Appointments</button>
+        <button class="menu-btn" data-target="prescriptions">Prescriptions</button>
+        <button class="menu-btn" id="logout-btn">Logout</button>
     </div>
 
-    <script src="script.js"></script>
-    <script src="validation.js"></script>
+    <!-- Main Content -->
+    <div class="content">
+
+        <!-- Dashboard Section -->
+        <div class="content-section active" id="dashboard">
+            <div class="card">
+                <h2>My Dashboard</h2>
+                <div class="stats-grid">
+                    <div class="stat-box pending">
+                        <h3>Upcoming Appointments</h3>
+                        <p id="upcoming-count">0</p>
+                    </div>
+                    <div class="stat-box completed">
+                        <h3>Completed Appointments</h3>
+                        <p id="completed-count">0</p>
+                    </div>
+                    <div class="stat-box prescriptions">
+                        <h3>Prescriptions Received</h3>
+                        <p id="prescriptions-count">0</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Section -->
+        <div class="content-section" id="profile">
+            <div class="profile-form">
+                <h3>My Profile</h3>
+                <form action="../../../Controller/dashboard/patient/patientProfileAction.php" method="POST">
+                    <label for="fullname">Full Name</label>
+                    <input type="text" id="fullname" name="fullname" placeholder="Enter your full name">
+
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email">
+
+                    <label for="phone">Phone</label>
+                    <input type="text" id="phone" name="phone" placeholder="Enter your phone number">
+
+                    <label for="gender">Gender</label>
+                    <select id="gender" name="gender">
+                        <option value="">-- Select Gender --</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+
+                    <label for="address">Address</label>
+                    <textarea id="address" name="address" placeholder="Enter your address"></textarea>
+
+                    <button type="submit" class="save-btn">Save Changes</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Appointments Section -->
+        <div class="content-section" id="appointments">
+            <div class="appointment-form">
+                <h3>Book Appointment</h3>
+                <form action="../../../Controller/dashboard/patient/bookAppointmentAction.php" method="POST">
+                    <label for="doctor">Select Doctor</label>
+                    <select id="doctor" name="doctor_id">
+                        <option value="">-- Select Doctor --</option>
+                        <!-- Dynamic doctors loaded from database -->
+                    </select>
+
+                    <label for="appointment-date">Appointment Date</label>
+                    <input type="date" id="appointment-date" name="appointment_date">
+
+                    <label for="reason">Reason for Appointment</label>
+                    <textarea id="reason" name="reason" placeholder="Enter reason"></textarea>
+
+                    <button type="submit" class="save-btn">Book Appointment</button>
+                </form>
+            </div>
+
+            <!-- My Appointments Table -->
+            <div class="card">
+                <h2>My Appointments</h2>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Doctor</th>
+                            <th>Date</th>
+                            <th>Reason</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="appointment-list">
+                        <!-- Dynamic appointment data -->
+                        <!-- Example row:
+                        <tr>
+                            <td>Dr. Smith</td>
+                            <td>2025-10-15</td>
+                            <td>Fever</td>
+                            <td>Upcoming</td>
+                            <td><button class="cancel-btn">Cancel</button></td>
+                        </tr>
+                        -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Prescriptions Section -->
+        <div class="content-section" id="prescriptions">
+            <div class="card">
+                <h2>My Prescriptions</h2>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Prescription ID</th>
+                            <th>Doctor</th>
+                            <th>Medicine</th>
+                            <th>Dosage</th>
+                            <th>Duration</th>
+                            <th>Notes</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="prescription-list">
+                        <!-- Dynamic prescription data -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
