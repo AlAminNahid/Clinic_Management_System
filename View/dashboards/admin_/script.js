@@ -10,7 +10,11 @@ document.addEventListener("DOMContentLoaded", () => {
             sections.forEach(section => section.classList.remove("active"));
             const targetId = button.getAttribute("data-target");
             const targetSection = document.getElementById(targetId);
-            if (targetSection) targetSection.classList.add("active");
+            if (targetSection) {
+                targetSection.classList.add("active");
+            } 
+
+            checkSession();
         });
     });
 
@@ -26,6 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
     fetchAppointments();
     fetchMedicines();
     fetchBackups();
+    startSessionMonitoring();
 });
 
 function fetchBackups(){
@@ -234,4 +239,28 @@ function fetchMedicines() {
                 `;
             });
         });
+}
+
+let lastAction = Date.now();
+
+document.addEventListener("mousemove", () => lastAction = Date.now());
+document.addEventListener("keydown", () => lastAction = Date.now());
+document.addEventListener("click", () => lastAction = Date.now());
+
+function checkSession(){
+    fetch('../../../Controller/dashboard/admin/checkSession.php')
+    .then(res => res.json())
+    .then(data => {
+        if(data.status === "expired"){
+            alert('Your session has expired. Please log in again.');
+            window.location.href = '../../login_reg_forget/login/login.php?expired=1';
+        }
+    })
+    .catch(err => console.error("Session check failed:", err));
+}
+
+function startSessionMonitoring(){
+    setInterval(() => {
+        checkSession();
+    }, 10000)
 }

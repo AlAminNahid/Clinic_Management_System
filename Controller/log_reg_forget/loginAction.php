@@ -20,22 +20,21 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             $_SESSION['login_id'] = $user['LoginID'];
             $_SESSION['email'] = $user['Email'];
             $_SESSION['role'] = $user['Role'];
+            $_SESSION['lastActivity'] = time();
 
-            // Set role-specific session variables
             if($user['Role'] === 'admin'){
                 $_SESSION['user_id'] = $user['AdminID'];
-                $_SESSION['admin_id'] = $user['AdminID']; // For consistency
+                $_SESSION['admin_id'] = $user['AdminID'];
             }
             else if($user['Role'] === 'doctor'){
                 $_SESSION['user_id'] = $user['DoctorID'];
-                $_SESSION['doctor_id'] = $user['DoctorID']; // For consistency
+                $_SESSION['doctor_id'] = $user['DoctorID'];
             }
             else if($user['Role'] === 'patient'){
                 $_SESSION['user_id'] = $user['PatientID'];
-                $_SESSION['patient_id'] = $user['PatientID']; // For consistency
+                $_SESSION['patient_id'] = $user['PatientID'];
             }
 
-            // Redirect based on role
             if($user['Role'] === 'admin'){
                 echo "
                     <script>

@@ -1,3 +1,23 @@
+<?php
+    session_start();
+
+    $timeoutDuration = 60;
+
+    if(!isset($_SESSION['admin_id'])){
+        header("Location: ../../login_reg_forget/login/login.php");
+        exit();
+    }
+
+    if(isset($_SESSION['lastActivity']) && (time() - $_SESSION['lastActivity']) > $timeoutDuration){
+        session_unset();
+        session_destroy();
+        header("Location: ../../login_reg_forget/login/login.php?expired=1");
+        exit();
+    }
+
+    $_SESSION['lastActivity'] = time();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
