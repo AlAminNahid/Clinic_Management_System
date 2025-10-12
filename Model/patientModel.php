@@ -1,354 +1,310 @@
 <?php
-    include("conn.php");
+require_once "conn.php";
 
-    function getPatientInfo($conn, $patientID){
-        $sql = "SELECT * FROM Patient WHERE PatientID = ?";
-        $stmt = mysqli_prepare($conn, $sql);
-        mysqli_stmt_bind_param($stmt, "i", $patientID);
-        mysqli_stmt_execute($stmt);
-        $result = mysqli_stmt_get_result($stmt);
+class PatientModel {
+    private $conn;
 
-        return mysqli_fetch_assoc($result);
-    }
-
-    function getPatientAppointments($conn, $patientID){
-        $sql = "SELECT a.*, d.FullName as DoctorName, d.Specialization 
-                FROM Appointment a 
-                JOIN Doctor d ON a.DoctorID = d.DoctorID 
-                WHERE a.PatientID = ? 
-                ORDER BY a.Date DESC, a.Time DESC";
-        $stmt = mysqli_prepare($conn, $sql);
-        mysqli_stmt_bind_param($stmt, "i", $patientID);
-        mysqli_stmt_execute($stmt);
-        $result = mysqli_stmt_get_result($stmt);
-
-        $data = [];
-        while($row = mysqli_fetch_assoc($result)){
-            $data[] = $row;
+    public function __construct() {
+        try {
+            $this->conn = getConnection();
+            if (!$this->conn) {
+                throw new Exception("Database connection failed - getConnection() returned null");
+            }
+            
+            // Test the connection
+            if (!$this->conn->ping()) {
+                throw new Exception("Database connection is not active");
+            }
+            
+            error_log("PatientModel: Database connection established successfully");
+            
+        } catch (Exception $e) {
+            error_log("PatientModel constructor error: " . $e->getMessage());
+            throw new Exception("Failed to initialize PatientModel: " . $e->getMessage());
         }
-
-        return $data;
     }
 
-    function getPatientPrescriptions($conn, $patientID){
-        $sql = "SELECT p.*, d.FullName as DoctorName, m.Name as MedicineName 
-                FROM Prescription p 
-                JOIN Doctor d ON p.DoctorID = d.DoctorID 
-                JOIN Medicine m ON p.MedicineID = m.MedicineID 
-                WHERE p.PatientID = ? 
-                ORDER BY p.Date DESC";
-        $stmt = mysqli_prepare($conn, $sql);
-        mysqli_stmt_bind_param($stmt, "i", $patientID);
-        mysqli_stmt_execute($stmt);
-        $result = mysqli_stmt_get_result($stmt);
-
-        $data = [];
-        while($row = mysqli_fetch_assoc($result)){
-            $data[] = $row;
-        }
-
-        return $data;
-    }
-
-    function getAllDoctors($conn){
-        $sql = "SELECT * FROM Doctor ORDER BY FullName";
-        $result = mysqli_query($conn, $sql);
-
-        $data = [];
-        while($row = mysqli_fetch_assoc($result)){
-            $data[] = $row;
-        }
-
-        return $data;
-    }
-
-    function getAvailableDoctors($conn){
-        $sql = "SELECT DISTINCT d.* FROM Doctor d 
-                JOIN AppointmentSlots s ON d.DoctorID = s.DoctorID 
-                WHERE d.DoctorID IN (SELECT DISTINCT DoctorID FROM AppointmentSlots)
-                ORDER BY d.FullName";
-        $result = mysqli_query($conn, $sql);
-
-        $data = [];
-        while($row = mysqli_fetch_assoc($result)){
-            $data[] = $row;
-        }
-
-        return $data;
-    }
-
-    function updatePatientProfile($conn, $patientID, $fullName, $phoneNumber, $age, $gender, $address){
-        $sql = "UPDATE Patient SET FullName=?, PhoneNumber=?, Age=?, Gender=?, Address=? 
-                WHERE PatientID = ?";
-        $stmt = mysqli_prepare($conn, $sql);
-
-        if(!$stmt){
+    public function getPatientById($patientId) {
+        try {
+            error_log("getPatientById: Fetching patient with ID: " . $patientId);
+            
+            if (empty($patientId)) {
+                throw new Exception("Patient ID is empty");
+            }
+            
+            $stmt = $this->conn->prepare("SELECT * FROM Patient WHERE PatientID = ?");
+            if (!$stmt) {
+                throw new Exception("Prepare failed: " . $this->conn->error);
+            }
+            
+            $stmt->bind_param("i", $patientId);
+            if (!$stmt->execute()) {
+                throw new Exception("Execute failed: " . $stmt->error);
+            }
+            
+            $result = $stmt->get_result();
+            $patient = $result->fetch_assoc();
+            
+            error_log("getPatientById: Found " . ($patient ? 'patient data' : 'no patient'));
+            return $patient;
+            
+        } catch (Exception $e) {
+            error_log("Error in getPatientById: " . $e->getMessage());
             return false;
         }
-
-        mysqli_stmt_bind_param($stmt, "ssissi", $fullName, $phoneNumber, $age, $gender, $address, $patientID);
-        $result = mysqli_stmt_execute($stmt);
-        mysqli_stmt_close($stmt);
-
-        return $result;
     }
 
-    function bookAppointment($conn, $doctorID, $patientID, $date, $time, $reason){
-        // Check if time slot is available
-        if(!isTimeSlotAvailable($conn, $doctorID, $date, $time)){
+    public function updateProfile($patientId, $fullname, $phone, $age, $gender, $address) {
+        try {
+            error_log("updateProfile: Updating patient ID: " . $patientId);
+            
+            // Validate inputs
+            if (empty($patientId) || empty($fullname) || empty($phone)) {
+                throw new Exception("Required fields are missing");
+            }
+            
+            $stmt = $this->conn->prepare("UPDATE Patient SET FullName=?, PhoneNumber=?, Age=?, Gender=?, Address=? WHERE PatientID=?");
+            if (!$stmt) {
+                throw new Exception("Prepare failed: " . $this->conn->error);
+            }
+            
+            $stmt->bind_param("ssissi", $fullname, $phone, $age, $gender, $address, $patientId);
+            $success = $stmt->execute();
+            
+            error_log("updateProfile: Update " . ($success ? "successful" : "failed"));
+            return $success;
+            
+        } catch (Exception $e) {
+            error_log("Error in updateProfile: " . $e->getMessage());
             return false;
         }
+    }
 
-        $sql = "INSERT INTO Appointment (DoctorID, PatientID, Date, Time, Status, Reason) 
-                VALUES (?, ?, ?, ?, 'Booked', ?)";
-        $stmt = mysqli_prepare($conn, $sql);
+    public function getUpcomingAppointmentsCount($patientId) {
+        try {
+            $stmt = $this->conn->prepare("SELECT COUNT(*) as count FROM Appointment WHERE PatientID = ? AND Date >= CURDATE() AND Status IN ('Booked', 'Approved')");
+            if (!$stmt) {
+                throw new Exception("Prepare failed: " . $this->conn->error);
+            }
+            
+            $stmt->bind_param("i", $patientId);
+            $stmt->execute();
+            $result = $stmt->get_result()->fetch_assoc();
+            return $result['count'] ?? 0;
+            
+        } catch (Exception $e) {
+            error_log("Error in getUpcomingAppointmentsCount: " . $e->getMessage());
+            return 0;
+        }
+    }
 
-        if(!$stmt){
+    public function getTotalPrescriptionsCount($patientId) {
+        try {
+            $stmt = $this->conn->prepare("SELECT COUNT(*) as count FROM Prescription WHERE PatientID = ?");
+            if (!$stmt) {
+                throw new Exception("Prepare failed: " . $this->conn->error);
+            }
+            
+            $stmt->bind_param("i", $patientId);
+            $stmt->execute();
+            $result = $stmt->get_result()->fetch_assoc();
+            return $result['count'] ?? 0;
+            
+        } catch (Exception $e) {
+            error_log("Error in getTotalPrescriptionsCount: " . $e->getMessage());
+            return 0;
+        }
+    }
+
+    public function getTotalAppointmentsCount($patientId) {
+        try {
+            $stmt = $this->conn->prepare("SELECT COUNT(*) as count FROM Appointment WHERE PatientID = ?");
+            if (!$stmt) {
+                throw new Exception("Prepare failed: " . $this->conn->error);
+            }
+            
+            $stmt->bind_param("i", $patientId);
+            $stmt->execute();
+            $result = $stmt->get_result()->fetch_assoc();
+            return $result['count'] ?? 0;
+            
+        } catch (Exception $e) {
+            error_log("Error in getTotalAppointmentsCount: " . $e->getMessage());
+            return 0;
+        }
+    }
+
+    public function getLastVisit($patientId) {
+        try {
+            $stmt = $this->conn->prepare("SELECT Date FROM Appointment WHERE PatientID = ? AND Status = 'Completed' ORDER BY Date DESC LIMIT 1");
+            if (!$stmt) {
+                throw new Exception("Prepare failed: " . $this->conn->error);
+            }
+            
+            $stmt->bind_param("i", $patientId);
+            $stmt->execute();
+            $result = $stmt->get_result()->fetch_assoc();
+            return $result ? $result['Date'] : null;
+            
+        } catch (Exception $e) {
+            error_log("Error in getLastVisit: " . $e->getMessage());
+            return null;
+        }
+    }
+
+    public function getPatientAppointments($patientId) {
+        try {
+            $stmt = $this->conn->prepare("SELECT a.*, d.FullName as DoctorName, d.Specialization 
+                                         FROM Appointment a 
+                                         JOIN Doctor d ON a.DoctorID = d.DoctorID 
+                                         WHERE a.PatientID = ? 
+                                         ORDER BY a.Date DESC, a.Time DESC");
+            if (!$stmt) {
+                throw new Exception("Prepare failed: " . $this->conn->error);
+            }
+            
+            $stmt->bind_param("i", $patientId);
+            $stmt->execute();
+            return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+            
+        } catch (Exception $e) {
+            error_log("Error in getPatientAppointments: " . $e->getMessage());
+            return [];
+        }
+    }
+
+    public function getPatientPrescriptions($patientId) {
+        try {
+            $stmt = $this->conn->prepare("SELECT p.*, d.FullName as DoctorName, m.Name as MedicineName 
+                                         FROM Prescription p 
+                                         JOIN Doctor d ON p.DoctorID = d.DoctorID 
+                                         JOIN Medicine m ON p.MedicineID = m.MedicineID 
+                                         WHERE p.PatientID = ? 
+                                         ORDER BY p.Date DESC");
+            if (!$stmt) {
+                throw new Exception("Prepare failed: " . $this->conn->error);
+            }
+            
+            $stmt->bind_param("i", $patientId);
+            $stmt->execute();
+            return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+            
+        } catch (Exception $e) {
+            error_log("Error in getPatientPrescriptions: " . $e->getMessage());
+            return [];
+        }
+    }
+
+    public function getAvailableDoctors() {
+        try {
+            $result = $this->conn->query("SELECT * FROM Doctor WHERE Status = 'Active'");
+            if (!$result) {
+                throw new Exception("Query failed: " . $this->conn->error);
+            }
+            return $result->fetch_all(MYSQLI_ASSOC);
+            
+        } catch (Exception $e) {
+            error_log("Error in getAvailableDoctors: " . $e->getMessage());
+            return [];
+        }
+    }
+
+    public function bookAppointment($patientId, $doctorId, $date, $time, $reason) {
+        try {
+            error_log("bookAppointment: Patient $patientId, Doctor $doctorId, Date $date, Time $time");
+            
+            // Validate inputs
+            if (empty($patientId) || empty($doctorId) || empty($date) || empty($time) || empty($reason)) {
+                throw new Exception("All appointment fields are required");
+            }
+            
+            // Check if the time slot is available
+            $checkStmt = $this->conn->prepare("SELECT AppointmentID FROM Appointment WHERE DoctorID = ? AND Date = ? AND Time = ? AND Status IN ('Booked', 'Approved')");
+            if (!$checkStmt) {
+                throw new Exception("Prepare failed for availability check: " . $this->conn->error);
+            }
+            
+            $checkStmt->bind_param("iss", $doctorId, $date, $time);
+            if (!$checkStmt->execute()) {
+                throw new Exception("Execute failed for availability check: " . $checkStmt->error);
+            }
+            
+            $checkResult = $checkStmt->get_result();
+            if ($checkResult->num_rows > 0) {
+                throw new Exception("This time slot is already booked. Please choose a different time.");
+            }
+
+            // Insert the appointment
+            $stmt = $this->conn->prepare("INSERT INTO Appointment (PatientID, DoctorID, Date, Time, Reason, Status) VALUES (?, ?, ?, ?, ?, 'Booked')");
+            if (!$stmt) {
+                throw new Exception("Prepare failed for appointment insertion: " . $this->conn->error);
+            }
+            
+            $stmt->bind_param("iisss", $patientId, $doctorId, $date, $time, $reason);
+            $success = $stmt->execute();
+            
+            if ($success) {
+                error_log("bookAppointment: Appointment booked successfully");
+            } else {
+                throw new Exception("Execute failed for appointment insertion: " . $stmt->error);
+            }
+            
+            return $success;
+            
+        } catch (Exception $e) {
+            error_log("Error in bookAppointment: " . $e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function cancelAppointment($appointmentId, $patientId) {
+        try {
+            error_log("cancelAppointment: Cancelling appointment $appointmentId for patient $patientId");
+            
+            $stmt = $this->conn->prepare("UPDATE Appointment SET Status = 'Cancelled' WHERE AppointmentID = ? AND PatientID = ?");
+            if (!$stmt) {
+                throw new Exception("Prepare failed: " . $this->conn->error);
+            }
+            
+            $stmt->bind_param("ii", $appointmentId, $patientId);
+            $success = $stmt->execute();
+            
+            error_log("cancelAppointment: Cancellation " . ($success ? "successful" : "failed"));
+            return $success;
+            
+        } catch (Exception $e) {
+            error_log("Error in cancelAppointment: " . $e->getMessage());
             return false;
         }
-
-        mysqli_stmt_bind_param($stmt, "iisss", $doctorID, $patientID, $date, $time, $reason);
-        $result = mysqli_stmt_execute($stmt);
-        mysqli_stmt_close($stmt);
-
-        return $result;
     }
 
-    function isTimeSlotAvailable($conn, $doctorID, $date, $time){
-        $sql = "SELECT AppointmentID FROM Appointment 
-                WHERE DoctorID = ? AND Date = ? AND Time = ? 
-                AND Status IN ('Booked', 'Approved')";
-        $stmt = mysqli_prepare($conn, $sql);
-        mysqli_stmt_bind_param($stmt, "iss", $doctorID, $date, $time);
-        mysqli_stmt_execute($stmt);
-        $result = mysqli_stmt_get_result($stmt);
-
-        return mysqli_num_rows($result) === 0;
-    }
-
-    function cancelAppointment($conn, $appointmentID, $patientID){
-        // Verify appointment ownership
-        if(!isAppointmentOwnedByPatient($conn, $appointmentID, $patientID)){
-            return false;
+    // Add a method to check if tables exist (for debugging)
+    public function checkTables() {
+        try {
+            $tables = ['Patient', 'Appointment', 'Doctor', 'Prescription', 'Medicine'];
+            $existingTables = [];
+            
+            foreach ($tables as $table) {
+                $result = $this->conn->query("SHOW TABLES LIKE '$table'");
+                if ($result && $result->num_rows > 0) {
+                    $existingTables[] = $table;
+                }
+            }
+            
+            error_log("Existing tables: " . implode(', ', $existingTables));
+            return $existingTables;
+            
+        } catch (Exception $e) {
+            error_log("Error checking tables: " . $e->getMessage());
+            return [];
         }
-
-        $sql = "UPDATE Appointment SET Status = 'Cancelled' 
-                WHERE AppointmentID = ? AND PatientID = ?";
-        $stmt = mysqli_prepare($conn, $sql);
-        mysqli_stmt_bind_param($stmt, "ii", $appointmentID, $patientID);
-        $result = mysqli_stmt_execute($stmt);
-        mysqli_stmt_close($stmt);
-        
-        return $result;
     }
 
-    function isAppointmentOwnedByPatient($conn, $appointmentID, $patientID){
-        $sql = "SELECT AppointmentID FROM Appointment 
-                WHERE AppointmentID = ? AND PatientID = ?";
-        $stmt = mysqli_prepare($conn, $sql);
-        mysqli_stmt_bind_param($stmt, "ii", $appointmentID, $patientID);
-        mysqli_stmt_execute($stmt);
-        $result = mysqli_stmt_get_result($stmt);
-
-        return mysqli_num_rows($result) > 0;
-    }
-
-    function getAppointmentById($conn, $appointmentID, $patientID){
-        $sql = "SELECT a.*, d.FullName as DoctorName, d.Specialization 
-                FROM Appointment a 
-                JOIN Doctor d ON a.DoctorID = d.DoctorID 
-                WHERE a.AppointmentID = ? AND a.PatientID = ?";
-        $stmt = mysqli_prepare($conn, $sql);
-        mysqli_stmt_bind_param($stmt, "ii", $appointmentID, $patientID);
-        mysqli_stmt_execute($stmt);
-        $result = mysqli_stmt_get_result($stmt);
-
-        return mysqli_fetch_assoc($result);
-    }
-
-    function getDoctorSlots($conn, $doctorID, $date){
-        $dayOfWeek = date('D', strtotime($date));
-        
-        $sql = "SELECT * FROM AppointmentSlots 
-                WHERE DoctorID = ? AND FIND_IN_SET(?, Days) > 0 
-                ORDER BY StartTime";
-        $stmt = mysqli_prepare($conn, $sql);
-        mysqli_stmt_bind_param($stmt, "is", $doctorID, $dayOfWeek);
-        mysqli_stmt_execute($stmt);
-        $result = mysqli_stmt_get_result($stmt);
-
-        $data = [];
-        while($row = mysqli_fetch_assoc($result)){
-            $data[] = $row;
+    // Close connection (optional, for cleanup)
+    public function __destruct() {
+        if ($this->conn) {
+            $this->conn->close();
         }
-
-        return $data;
     }
-
-    function getUpcomingAppointments($conn, $patientID, $limit = 5){
-        $sql = "SELECT a.*, d.FullName as DoctorName, d.Specialization 
-                FROM Appointment a 
-                JOIN Doctor d ON a.DoctorID = d.DoctorID 
-                WHERE a.PatientID = ? AND a.Date >= CURDATE() 
-                AND a.Status IN ('Booked', 'Approved')
-                ORDER BY a.Date ASC, a.Time ASC 
-                LIMIT ?";
-        $stmt = mysqli_prepare($conn, $sql);
-        mysqli_stmt_bind_param($stmt, "ii", $patientID, $limit);
-        mysqli_stmt_execute($stmt);
-        $result = mysqli_stmt_get_result($stmt);
-
-        $data = [];
-        while($row = mysqli_fetch_assoc($result)){
-            $data[] = $row;
-        }
-
-        return $data;
-    }
-
-    function getAppointmentStats($conn, $patientID){
-        $sql = "SELECT 
-                COUNT(*) as total,
-                SUM(CASE WHEN Status = 'Booked' THEN 1 ELSE 0 END) as booked,
-                SUM(CASE WHEN Status = 'Approved' THEN 1 ELSE 0 END) as approved,
-                SUM(CASE WHEN Status = 'Completed' THEN 1 ELSE 0 END) as completed,
-                SUM(CASE WHEN Status = 'Cancelled' THEN 1 ELSE 0 END) as cancelled
-                FROM Appointment 
-                WHERE PatientID = ?";
-        $stmt = mysqli_prepare($conn, $sql);
-        mysqli_stmt_bind_param($stmt, "i", $patientID);
-        mysqli_stmt_execute($stmt);
-        $result = mysqli_stmt_get_result($stmt);
-
-        return mysqli_fetch_assoc($result);
-    }
-
-    function searchAppointments($conn, $patientID, $searchTerm){
-        $sql = "SELECT a.*, d.FullName as DoctorName, d.Specialization 
-                FROM Appointment a 
-                JOIN Doctor d ON a.DoctorID = d.DoctorID 
-                WHERE a.PatientID = ? AND 
-                      (d.FullName LIKE ? OR a.Reason LIKE ? OR a.Status LIKE ?)
-                ORDER BY a.Date DESC, a.Time DESC";
-        $stmt = mysqli_prepare($conn, $sql);
-        $searchPattern = "%" . $searchTerm . "%";
-        mysqli_stmt_bind_param($stmt, "isss", $patientID, $searchPattern, $searchPattern, $searchPattern);
-        mysqli_stmt_execute($stmt);
-        $result = mysqli_stmt_get_result($stmt);
-
-        $data = [];
-        while($row = mysqli_fetch_assoc($result)){
-            $data[] = $row;
-        }
-
-        return $data;
-    }
-
-    function getRecentPrescriptions($conn, $patientID, $limit = 5){
-        $sql = "SELECT p.*, d.FullName as DoctorName, m.Name as MedicineName 
-                FROM Prescription p 
-                JOIN Doctor d ON p.DoctorID = d.DoctorID 
-                JOIN Medicine m ON p.MedicineID = m.MedicineID 
-                WHERE p.PatientID = ? 
-                ORDER BY p.Date DESC 
-                LIMIT ?";
-        $stmt = mysqli_prepare($conn, $sql);
-        mysqli_stmt_bind_param($stmt, "ii", $patientID, $limit);
-        mysqli_stmt_execute($stmt);
-        $result = mysqli_stmt_get_result($stmt);
-
-        $data = [];
-        while($row = mysqli_fetch_assoc($result)){
-            $data[] = $row;
-        }
-
-        return $data;
-    }
-
-    function updatePatientCredentials($conn, $patientID, $email, $password = null){
-        if($password){
-            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-            $sql = "UPDATE Login SET Email = ?, Password = ? WHERE PatientID = ?";
-            $stmt = mysqli_prepare($conn, $sql);
-            mysqli_stmt_bind_param($stmt, "ssi", $email, $hashedPassword, $patientID);
-        } else {
-            $sql = "UPDATE Login SET Email = ? WHERE PatientID = ?";
-            $stmt = mysqli_prepare($conn, $sql);
-            mysqli_stmt_bind_param($stmt, "si", $email, $patientID);
-        }
-        
-        $result = mysqli_stmt_execute($stmt);
-        mysqli_stmt_close($stmt);
-
-        return $result;
-    }
-
-    function isEmailExists($conn, $email, $currentPatientID){
-        $sql = "SELECT LoginID FROM Login 
-                WHERE Email = ? AND PatientID != ? AND PatientID IS NOT NULL";
-        $stmt = mysqli_prepare($conn, $sql);
-        mysqli_stmt_bind_param($stmt, "si", $email, $currentPatientID);
-        mysqli_stmt_execute($stmt);
-        $result = mysqli_stmt_get_result($stmt);
-
-        return mysqli_num_rows($result) > 0;
-    }
-
-    function getMedicalHistorySummary($conn, $patientID){
-        $sql = "SELECT 
-                COUNT(DISTINCT p.PrescriptionID) as total_prescriptions,
-                COUNT(DISTINCT a.AppointmentID) as total_appointments,
-                MIN(a.Date) as first_visit,
-                MAX(a.Date) as last_visit
-                FROM Patient pt
-                LEFT JOIN Prescription p ON pt.PatientID = p.PatientID
-                LEFT JOIN Appointment a ON pt.PatientID = a.PatientID
-                WHERE pt.PatientID = ?";
-        $stmt = mysqli_prepare($conn, $sql);
-        mysqli_stmt_bind_param($stmt, "i", $patientID);
-        mysqli_stmt_execute($stmt);
-        $result = mysqli_stmt_get_result($stmt);
-
-        return mysqli_fetch_assoc($result);
-    }
-
-    function rescheduleAppointment($conn, $appointmentID, $patientID, $newDate, $newTime){
-        // Verify ownership
-        if(!isAppointmentOwnedByPatient($conn, $appointmentID, $patientID)){
-            return false;
-        }
-
-        // Get appointment details
-        $appointment = getAppointmentById($conn, $appointmentID, $patientID);
-        if(!$appointment){
-            return false;
-        }
-
-        // Check if new time slot is available
-        if(!isTimeSlotAvailable($conn, $appointment['DoctorID'], $newDate, $newTime)){
-            return false;
-        }
-
-        $sql = "UPDATE Appointment SET Date = ?, Time = ?, Status = 'Rescheduled' 
-                WHERE AppointmentID = ? AND PatientID = ?";
-        $stmt = mysqli_prepare($conn, $sql);
-        mysqli_stmt_bind_param($stmt, "ssii", $newDate, $newTime, $appointmentID, $patientID);
-        $result = mysqli_stmt_execute($stmt);
-        mysqli_stmt_close($stmt);
-
-        return $result;
-    }
-
-    function getPatientDashboardStats($conn, $patientID){
-        $upcomingAppointments = getUpcomingAppointments($conn, $patientID);
-        $totalPrescriptions = getRecentPrescriptions($conn, $patientID);
-        $appointmentStats = getAppointmentStats($conn, $patientID);
-
-        return [
-            'upcoming_appointments' => count($upcomingAppointments),
-            'total_prescriptions' => count($totalPrescriptions),
-            'total_appointments' => $appointmentStats['total'],
-            'last_visit' => !empty($upcomingAppointments) ? $upcomingAppointments[0]['Date'] : 'No visits'
-        ];
-    }
+}
 ?>
