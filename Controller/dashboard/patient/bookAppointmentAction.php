@@ -1,27 +1,29 @@
 <?php
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
+require_once "../../../Model/patientModel.php";
 session_start();
-require_once '../../Model/conn.php';
 
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'patient') {
-    header('Content-Type: application/json');
-    echo json_encode(['success' => false, 'message' => 'Unauthorized']);
+if (!isset($_SESSION['patient_id'])) {
+    header("Location: ../../login.php");
     exit();
 }
 
-$patient_id = $_SESSION['user_id'];
-$doctor_id = intval($_POST['doctor']);
-$date = $_POST['appointment-date'];
-$time = $_POST['appointment-time'];
-$reason = trim($_POST['reason']);
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $patientId = $_SESSION['patient_id'];
+    $doctorId = $_POST['doctor_id'] ?? '';
+    $appointmentDate = $_POST['appointment_date'] ?? '';
+    $reason = $_POST['reason'] ?? '';
 
-if (empty($doctor_id) || empty($date) || empty($time) || empty($reason)) {
-    echo json_encode(['success' => false, 'message' => 'All fields are required']);
+    // Validate input
+    if (empty($doctorId) || empty($appointmentDate) || empty($reason)) {
+        $error = "Please fill all fields.";
+        header("Location: ../../../View/dashboard/patient.php?error=" . urlencode($error));
+        exit();
+    }
+
+    
     exit();
-}
-
-if (bookAppointment($conn, $doctor_id, $patient_id, $date, $time, $reason)) {
-    echo json_encode(['success' => true, 'message' => 'Appointment booked successfully']);
-} else {
-    echo json_encode(['success' => false, 'message' => 'Failed to book appointment. Time slot may be unavailable.']);
 }
 ?>

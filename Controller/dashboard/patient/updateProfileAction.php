@@ -15,7 +15,6 @@ $age = intval($_POST['age']);
 $gender = trim($_POST['gender']);
 $address = trim($_POST['address']);
 
-// Basic validation
 if (empty($fullName) || empty($phoneNumber) || empty($gender) || empty($address) || $age <= 0) {
     echo json_encode(['success' => false, 'message' => 'All fields are required']);
     exit();
