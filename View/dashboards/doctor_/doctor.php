@@ -5,12 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Doctor Dashboard</title>
     <link rel="stylesheet" href="style.css">
-    <script src="formValidation.js"></script>
+    <script src="validation.js"></script>
 </head>
 <body>
 
 <div class="dashboard">
-    <!-- Sidebar Menu -->
     <div class="menu">
         <h2 class="menu-title">Doctor Panel</h2>
         <button class="menu-btn active" data-target="dashboard">Dashboard</button>
@@ -20,10 +19,8 @@
         <button class="menu-btn" id="logout-btn">Logout</button>
     </div>
 
-    <!-- Main Content -->
     <div class="content">
 
-        <!-- Dashboard Section -->
         <div class="content-section active" id="dashboard">
             <div class="card">
                 <h2>Appointments Overview</h2>
@@ -44,38 +41,42 @@
             </div>
         </div>
 
-        <!-- Profile Section -->
-        <div class="content-section" id="profile">
-            <div class="profile-form">
-                <h3>My Profile</h3>
-                <form action="../../../Controller/dashboard/doctor/doctorProfileAction.php" method="POST">
-                    <label for="fullname">Full Name</label>
-                    <input type="text" id="fullname" name="fullname" placeholder="Enter your full name">
+<div class="content-section" id="profile">
+    <div class="profile-form">
+        <h3>My Profile</h3>
+        <form action="../../../Controller/dashboard/doctor/doctorProfileController.php" method="POST">
+            <input type="hidden" name="update_profile" value="1">
 
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" placeholder="Enter your email">
+            <label for="fullname">Full Name</label>
+            <input type="text" id="fullname" name="fullname" placeholder="Enter your full name" value="<?= htmlspecialchars($doctor['FullName'] ?? '') ?>">
 
-                    <label for="phone">Phone</label>
-                    <input type="text" id="phone" name="phone" placeholder="Enter phone number">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email" value="<?= htmlspecialchars($doctor['Email'] ?? '') ?>">
 
-                    <label for="specialization">Specialization</label>
-                    <input type="text" id="specialization" name="specialization" placeholder="Enter specialization">
+            <label for="phone">Phone</label>
+            <input type="text" id="phone" name="phone" placeholder="Enter phone number" value="<?= htmlspecialchars($doctor['PhoneNumber'] ?? '') ?>">
 
-                    <label for="visit-fee">Visit Fee</label>
-                    <input type="text" id="visit-fee" name="visit_fee" placeholder="Enter visit fee">
+            <label for="specialization">Specialization</label>
+            <input type="text" id="specialization" name="specialization" placeholder="Enter specialization" value="<?= htmlspecialchars($doctor['Specialization'] ?? '') ?>">
 
-                    <label for="password">Change Password</label>
-                    <input type="password" id="password" name="password" placeholder="Enter new password">
+            <label for="visit-fee">Visit Fee</label>
+            <input type="text" id="visit-fee" name="visit_fee" placeholder="Enter visit fee" value="<?= htmlspecialchars($doctor['VisitFee'] ?? '') ?>">
 
-                    <h3>Manage Appointment Slots</h3>
-                    <textarea id="slots" name="slots" placeholder="Enter available slots (e.g., Mon-Fri 10AM - 2PM)"></textarea>
+            <label for="password">Change Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter new password">
 
-                    <button type="submit" class="save-btn">Save Changes</button>
-                </form>
-            </div>
-        </div>
+            <h3>Manage Appointment Slots</h3>
+            <textarea id="slots" name="slots" placeholder="Enter available slots (e.g., Mon-Fri 10AM - 2PM)"><?= htmlspecialchars($doctor['Slots'] ?? '') ?></textarea>
 
-        <!-- Patients Section -->
+            <button type="submit" class="save-btn">Save Changes</button>
+        </form>
+
+        <?php if (!empty($success)) echo "<p class='success'>$success</p>"; ?>
+        <?php if (!empty($error)) echo "<p class='error'>$error</p>"; ?>
+    </div>
+</div>
+
+
         <div class="content-section" id="patients">
             <div class="card">
                 <h2>My Patients</h2>
@@ -91,16 +92,12 @@
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody id="patient-list">
-                        <!-- Dynamic patient data -->
-                    </tbody>
+            
                 </table>
             </div>
         </div>
 
-        <!-- Prescription Section -->
         <div class="content-section" id="prescription">
-            <!-- Prescription Form -->
             <div class="medicine-form">
                 <h3>Create Prescription</h3>
                 <form action="../../../Controller/dashboard/doctor/addPrescriptionAction.php" method="POST">
@@ -127,7 +124,6 @@
                 </form>
             </div>
 
-            <!-- Saved Prescriptions Table -->
             <div class="card">
                 <h2>Saved Prescriptions</h2>
                 <table class="data-table">
@@ -142,9 +138,7 @@
                             <th>Date</th>
                         </tr>
                     </thead>
-                    <tbody id="prescription-list">
-                        <!-- Dynamic prescriptions -->
-                    </tbody>
+                   
                 </table>
             </div>
         </div>

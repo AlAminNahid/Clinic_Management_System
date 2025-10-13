@@ -1,8 +1,14 @@
 <?php
-require_once "../../Model/doctorModel.php";
-require_once '../../Model/conn.php';
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
+require_once "../../../Model/doctorModel.php";
+require_once '../../../Model/conn.php';
+
+$conn = getConnection();
 session_start();
+
 if (!isset($_SESSION['doctor_id'])) {
     header("Location: ../../login.php");
     exit();
@@ -12,7 +18,7 @@ $doctorId = $_SESSION['doctor_id'];
 $doctorModel = new DoctorModel($conn);
 $doctor = $doctorModel->getDoctorById($doctorId);
 
-if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update_profile'])) {
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $fullname = trim($_POST['fullname']);
     $email = trim($_POST['email']);
     $phone = trim($_POST['phone']);
