@@ -9,13 +9,12 @@ A **web-based application** designed to streamline communication and management 
 ### 👨‍💼 Admin
 -   **Dashboard & Profile**: A central hub for an overview of clinic activities and managing personal admin credentials.
 -   **Doctor Management**:
-    -   Add new doctors to the system.
     -   View, edit, and update existing doctor information.
     -   Delete doctor profiles from the system.
 -   **Patient Management**:
-    -   View patient records, medical history, and appointment history.
-    -   Edit and update patient information as required.
-    -   Delete patient records from the system.
+    -   View and manage patients' **basic information** (e.g., name, contact details).
+    -   Edit and update patient profiles.
+    -   Delete patient accounts from the system.
 -   **Appointment Oversight**:
     -   View all appointments scheduled across the clinic.
     -   Approve, cancel, or delete appointments.
