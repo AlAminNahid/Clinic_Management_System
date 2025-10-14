@@ -1,8 +1,8 @@
 <?PHP
     function getConnection() {
-        $servername = "localhost";
+        $servername = "db";
         $username = "root";
-        $password = "";
+        $password = "root";
         $dbname = "Clinic_Management_System";
 
         $conn = mysqli_connect($servername, $username, $password, $dbname);
