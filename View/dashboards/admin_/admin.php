@@ -26,8 +26,9 @@
     <title>Admin Dashboard</title>
     <link rel="stylesheet" href="style.css">
     <script src="script.js?"></script>
-    <script src="adminProfileFormValidation.js"></script>
-    <script src="adminMedicineFormValidation.js"></script>
+    <script src="validation.js"></script>
+    <!-- <script src="adminProfileFormValidation.js"></script>
+    <script src="adminMedicineFormValidation.js"></script> -->
     <script src="edit_delete_update.js"></script>
 </head>
 <body>

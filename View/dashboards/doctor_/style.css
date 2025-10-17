@@ -1,26 +1,37 @@
-/* Reset & basic setup */
-body {
+/* ===============================
+   Global Reset & Base Styles
+=============================== */
+* {
     margin: 0;
+    padding: 0;
+    box-sizing: border-box;
     font-family: Arial, sans-serif;
-    height: 100vh;
-    display: flex;
-    background: #ecf0f1;
 }
 
+body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+}
+
+/* ===============================
+   Dashboard Layout
+=============================== */
 .dashboard {
     display: flex;
     width: 100%;
 }
 
-/* Sidebar */
+/* ===============================
+   Sidebar Menu
+=============================== */
 .menu {
     width: 220px;
-    background: #007BFF;
+    background: #4CAF50;
     color: #ffffff;
-    padding: 20px 10px;
+    padding: 10px;
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
 }
 
 .menu-title {
@@ -45,28 +56,36 @@ body {
     transition: 0.3s;
 }
 
-.menu-btn:hover,
+.menu-btn:hover {
+    background: #388E3C;
+}
+
 .menu-btn.active {
-    background: #0056b3;
+    background: #388E3C;
     font-weight: bold;
 }
 
-/* Main Content */
+/* ===============================
+   Main Content Area
+=============================== */
 .content {
     flex: 1;
     padding: 20px;
+    background: #ecf0f1;
     overflow: auto;
 }
 
-/* Content Sections */
 .content-section {
     display: none;
 }
+
 .content-section.active {
     display: block;
 }
 
-/* Cards */
+/* ===============================
+   Card Components
+=============================== */
 .card {
     background: white;
     border-radius: 10px;
@@ -75,95 +94,89 @@ body {
     margin-bottom: 20px;
 }
 
-.card h2 {
-    margin-top: 0;
-    color: #007BFF;
-}
-
-/* Forms */
-.profile-form, .medicine-form {
-    margin: 20px auto;
-    max-width: 600px;
-    padding: 20px;
-    background: white;
-    border: 2px solid #b9bcc0;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-.profile-form h3, .medicine-form h3 {
-    text-align: center;
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 15px;
-    color: #2c3e50;
 }
 
-.profile-form label, .medicine-form label {
-    display: block;
-    margin: 10px 0 5px;
-    font-weight: bold;
-    color: #34495e;
+.card-header h2 {
+    margin: 0;
+    font-size: 18px;
+    color: #4CAF50;
 }
 
-.profile-form input, .medicine-form input, .profile-form textarea, .medicine-form textarea, .medicine-form select {
-    padding: 10px;
-    border: 1px solid #bdc3c7;
-    border-radius: 5px;
-    font-size: 14px;
-    outline: none;
-    width: 100%;
-    margin-bottom: 15px;
-    transition: border 0.2s;
-}
-
-.profile-form input:focus, .medicine-form input:focus,
-.profile-form textarea:focus, .medicine-form textarea:focus,
-.medicine-form select:focus {
-    border: 1px solid #007BFF;
-}
-
-/* Buttons */
-.save-btn {
-    margin-top: 10px;
-    padding: 12px;
-    background: #007BFF;
-    color: white;
-    font-size: 16px;
-    border-radius: 5px;
+/* ===============================
+   Buttons
+=============================== */
+.add-btn,
+.save-btn,
+.action-btn {
     border: none;
+    padding: 8px 14px;
+    border-radius: 5px;
     cursor: pointer;
-    transition: 0.3s;
-}
-
-.save-btn:hover {
-    background: #0056b3;
-}
-
-/* Tables */
-.data-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 15px;
-}
-
-.data-table thead {
-    background: #007BFF;
+    font-size: 14px;
     color: white;
+    transition: background 0.3s;
 }
 
-.data-table th, .data-table td {
-    padding: 12px 15px;
-    text-align: left;
-    border-bottom: 1px solid #ecf0f1;
+.add-btn {
+    background: #4CAF50;
 }
 
-.data-table tbody tr:hover {
-    background: #f8f9fa;
+.add-btn:hover {
+    background: #388E3C;
 }
 
-/* Stats */
+.edit-btn {
+    background: #4CAF50;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 5px;
+    transition: background 0.3s;
+}
+
+.edit-btn:hover {
+    background: #388E3C;
+}
+
+.delete-btn,
+.remove-btn,
+.cancel-btn {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.delete-btn:hover,
+.remove-btn:hover,
+.cancel-btn:hover {
+    background: #b02a37;
+}
+
+.approve-btn {
+    background: #4CAF50;
+}
+
+.approve-btn:hover {
+    background: #388E3C;
+}
+
+/* ===============================
+   Stats Section
+=============================== */
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 20px;
     margin-top: 20px;
 }
@@ -173,7 +186,7 @@ body {
     padding: 20px;
     border-radius: 10px;
     text-align: center;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s;
 }
 
@@ -189,16 +202,248 @@ body {
 .stat-box p {
     font-size: 24px;
     font-weight: bold;
-    color: #007BFF;
+    color: #4CAF50;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-    .menu {
-        width: 180px;
-    }
+/* ===============================
+   Data Tables
+=============================== */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
 
-    .stats-grid {
-        grid-template-columns: 1fr;
-    }
+.data-table thead {
+    background: #4CAF50;
+    color: white;
+}
+
+.data-table th,
+.data-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.data-table tbody tr:hover {
+    background: #f8f9fa;
+}
+
+/* ===============================
+   Profile Form
+=============================== */
+.profile-form {
+    margin: 20px auto;
+    max-width: 500px;
+    padding: 20px;
+    background: white;
+    border: 2px solid #b9bcc0;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profile-form h3 {
+    text-align: center;
+    margin-bottom: 15px;
+    color: #2c3e50;
+}
+
+.profile-form form {
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-form label {
+    display: block;
+    margin: 10px 0 5px;
+    font-weight: bold;
+    color: #34495e;
+}
+
+.profile-form input {
+    padding: 10px;
+    border: 1px solid #bdc3c7;
+    border-radius: 5px;
+    font-size: 14px;
+    outline: none;
+    transition: border 0.2s;
+}
+
+.profile-form input:focus {
+    border: 1px solid #4CAF50;
+}
+
+.save-btn {
+    margin-top: 20px;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    background: #4CAF50;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.save-btn:hover {
+    background: #388E3C;
+}
+
+/* ===============================
+   Manage Appointment Slots
+=============================== */
+.slot-card {
+    margin-top: 30px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+    padding: 25px;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.slot-card h3 {
+    text-align: center;
+    color: #2e7d32;
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+/* Input and Add Button */
+.slot-input {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.slot-input input[type="time"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 15px;
+    width: 150px;
+}
+
+.add-slot-btn {
+    background: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 18px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.add-slot-btn:hover {
+    background: #388E3C;
+}
+
+/* Table Styling */
+.slot-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.slot-table thead {
+    background: #4CAF50;
+    color: white;
+}
+
+.slot-table th,
+.slot-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 15px;
+}
+
+.slot-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.slot-table tbody tr:hover {
+    background: #f9f9f9;
+}
+
+/* Remove Button */
+.remove-slot-btn {
+    background: #f44336;
+    color: white;
+    border: none;
+    padding: 7px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.remove-slot-btn:hover {
+    background: #c62828;
+}
+/* ===============================
+   Medicine Form
+=============================== */
+.medicine-form {
+    margin: 20px auto;
+    max-width: 700px;
+    padding: 20px;
+    background: white;
+    border: 2px solid #b9bcc0;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.medicine-form h3 {
+    text-align: center;
+    margin-bottom: 15px;
+    color: #2c3e50;
+}
+
+.medicine-form form {
+    display: flex;
+    flex-direction: column;
+}
+
+.medicine-form label {
+    display: block;
+    margin: 10px 0 5px;
+    font-weight: bold;
+    color: #34495e;
+}
+
+.medicine-form input,
+.medicine-form select {
+    padding: 10px;
+    border: 1px solid #bdc3c7;
+    border-radius: 5px;
+    font-size: 14px;
+    outline: none;
+    transition: border 0.2s;
+}
+
+.medicine-form input:focus,
+.medicine-form select:focus {
+    border: 1px solid #4CAF50;
+}
+
+.medicine-form .save-btn {
+    margin-top: 20px;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    background: #4CAF50;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.medicine-form .save-btn:hover {
+    background: #388E3C;
 }

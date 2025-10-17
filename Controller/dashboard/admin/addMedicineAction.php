@@ -4,7 +4,7 @@
     error_reporting(E_ALL);
 
     session_start();
-    include("../../../Model/medicineModel.php");
+    include("../../../Model/adminDashboardModel.php");
     include("../../Validation/dashboard/admin/adminMedicineValidation.php");
 
     if($_SERVER["REQUEST_METHOD"] == "POST"){
