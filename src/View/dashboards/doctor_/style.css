@@ -1,6 +1,3 @@
-/* ===============================
-   Global Reset & Base Styles
-=============================== */
 * {
     margin: 0;
     padding: 0;
@@ -14,17 +11,11 @@ body {
     display: flex;
 }
 
-/* ===============================
-   Dashboard Layout
-=============================== */
 .dashboard {
     display: flex;
     width: 100%;
 }
 
-/* ===============================
-   Sidebar Menu
-=============================== */
 .menu {
     width: 220px;
     background: #4CAF50;
@@ -65,9 +56,6 @@ body {
     font-weight: bold;
 }
 
-/* ===============================
-   Main Content Area
-=============================== */
 .content {
     flex: 1;
     padding: 20px;
@@ -83,9 +71,6 @@ body {
     display: block;
 }
 
-/* ===============================
-   Card Components
-=============================== */
 .card {
     background: white;
     border-radius: 10px;
@@ -107,9 +92,11 @@ body {
     color: #4CAF50;
 }
 
-/* ===============================
-   Buttons
-=============================== */
+.dashboard-headings{
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
 .add-btn,
 .save-btn,
 .action-btn {
@@ -171,9 +158,6 @@ body {
     background: #388E3C;
 }
 
-/* ===============================
-   Stats Section
-=============================== */
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -183,7 +167,7 @@ body {
 
 .stat-box {
     background: white;
-    padding: 20px;
+    padding: 40px;
     border-radius: 10px;
     text-align: center;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
@@ -205,9 +189,6 @@ body {
     color: #4CAF50;
 }
 
-/* ===============================
-   Data Tables
-=============================== */
 .data-table {
     width: 100%;
     border-collapse: collapse;
@@ -229,9 +210,6 @@ body {
     background: #f8f9fa;
 }
 
-/* ===============================
-   Profile Form
-=============================== */
 .profile-form {
     margin: 20px auto;
     max-width: 500px;
@@ -289,9 +267,6 @@ body {
     background: #388E3C;
 }
 
-/* ===============================
-   Manage Appointment Slots
-=============================== */
 .slot-card {
     margin-top: 30px;
     background: #ffffff;
@@ -310,7 +285,6 @@ body {
     margin-bottom: 20px;
 }
 
-/* Input and Add Button */
 .slot-input {
     display: flex;
     align-items: center;
@@ -342,7 +316,6 @@ body {
     background: #388E3C;
 }
 
-/* Table Styling */
 .slot-table {
     width: 100%;
     border-collapse: collapse;
@@ -372,7 +345,6 @@ body {
     background: #f9f9f9;
 }
 
-/* Remove Button */
 .remove-slot-btn {
     background: #f44336;
     color: white;
@@ -386,9 +358,7 @@ body {
 .remove-slot-btn:hover {
     background: #c62828;
 }
-/* ===============================
-   Medicine Form
-=============================== */
+
 .medicine-form {
     margin: 20px auto;
     max-width: 700px;

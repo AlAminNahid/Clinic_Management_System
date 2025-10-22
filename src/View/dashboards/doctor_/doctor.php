@@ -6,10 +6,11 @@
     <title>Doctor Dashboard</title>
     <link rel="stylesheet" href="./style.css">
     <script src="./script.js"></script>
+    <script src="./validation.js"></script>
     </head>
 <body>
     <div class="dashboard">
-        <div class="menu" style="background-color: #4CAF50;"> <h2 class="menu-title">Doctor Panel</h2>
+        <div class="menu"> <h2 class="menu-title">Doctor Panel</h2>
             <button class="menu-btn" data-target="dashboard">Dashboard</button>
             <button class="menu-btn" data-target="profile">My Profile</button>
             <button class="menu-btn" data-target="patients">My Patients</button>
@@ -24,21 +25,23 @@
                     <div class="stats-grid">
                         <div class="stat-box">
                             <h3>Pending Appointments</h3>
-                            <p>12</p>
+                            <p id="pending-appointments"></p>
                         </div>
                         <div class="stat-box">
                             <h3>Approved Appointments</h3>
-                            <p>8</p>
+                            <p id="approved-appointments"></p>
                         </div>
                         <div class="stat-box">
                             <h3>Completed Appointments</h3>
-                            <p>5</p>
+                            <p id="completed-appointments"></p>
                         </div>
                     </div>
-                    <h3 style="margin-top: 20px;">Upcoming Appointments</h3>
+
+                    <h3 class="dashboard-headings">Upcoming Appointments</h3>
+                    
                     <table class="data-table">
                         <thead>
-                            <tr style="background-color: #4CAF50; color: white;">
+                            <tr>
                                 <th>Appointment ID</th>
                                 <th>Patient</th>
                                 <th>Date/Time</th>
@@ -46,53 +49,32 @@
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>#2001</td>
-                                <td>Alex Johnson</td>
-                                <td>2025-09-03 11:00 AM</td>
-                                <td>Pending</td>
-                                <td>
-                                    <button class="action-btn approve-btn" style="background-color: #4CAF55;">Approve</button>
-                                    <button class="action-btn cancel-btn" style="background-color: #F44336;">Cancel</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>#2002</td>
-                                <td>Maria Gomez</td>
-                                <td>2025-09-04 02:00 PM</td>
-                                <td>Pending</td>
-                                <td>
-                                    <button class="action-btn approve-btn" style="background-color: #4CAF50;">Approve</button>
-                                    <button class="action-btn cancel-btn" style="background-color: #F44336;">Cancel</button>
-                                </td>
-                            </tr>
-                            </tbody>
+                        <tbody id="upcomming-appointment-info">    
+                        </tbody>
                     </table>
                 </div>
             </div>
 
             <div class="content-section" id="profile">
                 <div class="card">
-                    <!-- Doctor Profile Section -->
                     <h2>Doctor Profile</h2>
                     <div class="profile-form">
                         <h3>Update Your Profile</h3>
-                        <form action="" method="POST">
+                        <form id="profile-form" action="" method="POST">
                             <label for="fullname">Full Name</label>
-                            <input type="text" id="fullname" name="fullname" value="Dr. John Smith" readonly>
+                            <input type="text" id="fullname" name="fullname" placeholder="Enter your full name">
 
                             <label for="email">Email Address</label>
-                            <input type="email" id="email" name="email" value="dr.john@example.com" readonly>
+                            <input type="email" id="email" name="email" placeholder="Enter your email address">
 
                             <label for="phone">Phone Number</label>
-                            <input type="text" id="phone" name="phone" value="+880123456789">
+                            <input type="text" id="phone" name="phone" placeholder="Enter your phone number">
 
                             <label for="specialization">Specialization</label>
-                            <input type="text" id="specialization" name="specialization" value="Cardiologist">
+                            <input type="text" id="specialization" name="specialization" placeholder="Enter your specialization">
 
                             <label for="visit-fee">Visit Fee ($)</label>
-                            <input type="number" id="visit-fee" name="visit-fee" value="50">
+                            <input type="number" id="visit-fee" name="visit-fee" placeholder="Enter your visit fee in taka, ex: 1000">
 
                             <label for="password">Change Password</label>
                             <input type="password" id="password" name="password" placeholder="Enter new password">
@@ -101,7 +83,6 @@
                         </form>
                     </div>
 
-                    <!-- Manage Appointment Slots Section -->
                     <div class="slot-card">
                         <h3>Manage Appointment Slots</h3>
                         <div class="slot-input">
@@ -131,32 +112,19 @@
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Monday</td>
-                                    <td>10:00 AM</td>
-                                    <td>12:00 PM</td>
-                                    <td><button class="remove-slot-btn">Remove</button></td>
-                                </tr>
-                                <tr>
-                                    <td>Tuesday</td>
-                                    <td>01:00 PM</td>
-                                    <td>03:00 PM</td>
-                                    <td><button class="remove-slot-btn">Remove</button></td>
-                                </tr>
+                            <tbody id="slot-table-info">
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
 
-
             <div class="content-section" id="patients">
                 <div class="card">
-                    <h2>My Patients</h2>
+                    <h2 style="margin-bottom: 10px;">My Patients</h2>
                     <table class="data-table">
                         <thead>
-                            <tr style="background-color: #4CAF50; color: white;">
+                            <tr>
                                 <th>Patient ID</th>
                                 <th>Name</th>
                                 <th>Email</th>
@@ -165,29 +133,7 @@
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>#P1001</td>
-                                <td>Alex Johnson</td>
-                                <td>alex@example.com</td>
-                                <td>+880123456789</td>
-                                <td>Diabetes</td>
-                                <td>
-                                    <button class="action-btn view-btn" style="background-color: #4CAF50;">View History</button>
-                                    <button class="action-btn remove-btn" style="background-color: #F44336;">Remove</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>#P1002</td>
-                                <td>Maria Gomez</td>
-                                <td>maria@example.com</td>
-                                <td>+880987654321</td>
-                                <td>Hypertension</td>
-                                <td>
-                                    <button class="action-btn view-btn" style="background-color: #4CAF50;">View History</button>
-                                    <button class="action-btn remove-btn" style="background-color: #F44336;">Remove</button>
-                                </td>
-                            </tr>
+                        <tbody id="my-patient-info">
                         </tbody>
                     </table>
                 </div>
@@ -198,11 +144,9 @@
                     <h2>Doctor Prescriptions</h2>
                     <div class="medicine-form">
                         <h3>Write Prescription</h3>
-                        <form action="/Controller/doctor/savePrescriptionAction.php" method="POST">
+                        <form id="medicine-form" action="" method="POST">
                             <label for="select-patient">Select Patient</label>
                             <select id="select-patient" name="patient">
-                                <option value="alex">Alex Johnson</option>
-                                <option value="maria">Maria Gomez</option>
                             </select>
 
                             <label for="medicine-name">Medicine Name</label>
@@ -215,16 +159,17 @@
                             <input type="text" id="duration" name="duration" placeholder="e.g. 7 days">
 
                             <label for="notes">Additional Notes</label>
-                            <input type="text" id="notes" name="notes" placeholder="Additional Notes">
+                            <textarea id="notes" name="notes" rows="4" cols="50" placeholder="Type here - "></textarea>
 
                             <button type="submit" class="save-btn" style="background-color: #4CAF50;">Save Prescription</button>
                         </form>
                     </div>
 
-                    <h3 style="margin-top: 30px;">Saved Prescriptions</h3>
+                    <h3 class="dashboard-headings">Saved Prescriptions</h3>
+
                     <table class="data-table">
                         <thead>
-                            <tr style="background-color: #4CAF50; color: white;">
+                            <tr>
                                 <th>Patient</th>
                                 <th>Medicine</th>
                                 <th>Dosage</th>
@@ -232,14 +177,7 @@
                                 <th>Notes</th>
                                 </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>Alex Johnson</td>
-                                <td>Paracetamol</td>
-                                <td>1 Tablet Twice Daily</td>
-                                <td>5 days</td>
-                                <td>After meals</td>
-                            </tr>
+                        <tbody id="saved-prescriptions-info">
                             </tbody>
                     </table>
                 </div>
