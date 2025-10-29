@@ -12,8 +12,8 @@
             <div class="logo">Clinic Management System</div>
             <nav>
                 <ul>
-                    <li><a href="">About</a></li>
-                    <li><a href="">Contact</a></li>
+                    <li><a href="../infoSection/about.html">About</a></li>
+                    <li><a href="../infoSection/contact.html">Contact</a></li>
                 </ul>
             </nav>
         </header>

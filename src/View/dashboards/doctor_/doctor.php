@@ -60,7 +60,7 @@
                     <h2>Doctor Profile</h2>
                     <div class="profile-form">
                         <h3>Update Your Profile</h3>
-                        <form id="profile-form" action="" method="POST">
+                        <form id="profile-form" action="../../../Controller/dashboard/doctor/doctorProfileAction.php" method="POST">
                             <label for="fullname">Full Name</label>
                             <input type="text" id="fullname" name="fullname" placeholder="Enter your full name">
 

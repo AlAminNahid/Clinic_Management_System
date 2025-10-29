@@ -92,4 +92,30 @@
 
         return $updateLogin;
     }
+
+    function updateDoctorProfile($conn, $doctorID, $name, $email, $phone, $specialization, $visit_fee, $password){
+        $name = mysqli_real_escape_string($conn, $name);
+        $email = mysqli_real_escape_string($conn, $email);
+        $phone = mysqli_real_escape_string($conn, $phone);
+        $specialization = mysqli_real_escape_string($conn, $specialization);
+        $visit_fee = mysqli_real_escape_string($conn, $visit_fee);
+        $password = password_hash($password, PASSWORD_DEFAULT);
+        $doctorID = (int)$doctorID;
+
+        $sqlDoctor = "UPDATE Doctor SET FullName='$name', PhoneNumber='$phone', Specialization='$specialization', VisitFee='$visit_fee'
+                      WHERE DoctorID=$doctorID";
+        
+        $updateDoctor = mysqli_query($conn, $sqlDoctor);
+
+        if(!$updateDoctor){
+            return false;
+        }
+
+        $sqlLogin = "UPDATE Login SET Email='$email', Password='$password'
+                     WHERE DoctorID=$doctorID AND Role='doctor'";
+
+        $updateLogin = mysqli_query($conn, $sqlLogin);
+        
+        return $updateLogin;
+    }
 ?>
