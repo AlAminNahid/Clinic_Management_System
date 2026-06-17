@@ -23,32 +23,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="script.js?"></script>
-    <script src="validation.js"></script>
-    <!-- <script src="adminProfileFormValidation.js"></script>
-    <script src="adminMedicineFormValidation.js"></script> -->
-    <script src="edit_delete_update.js"></script>
+    <title>Admin Workspace | ClinicOS</title>
+    <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg?v=20260618">
+    <link rel="stylesheet" href="style.css?v=20260618-saas-admin">
+    <script src="script.js?v=20260618-saas-admin"></script>
+    <script src="validation.js?v=20260618-inline-errors"></script>
+    <script src="edit_delete_update.js?v=20260618-saas-admin"></script>
 </head>
 <body>
     <div class="dashboard">
-        <div class="menu">
-            <h2 class="menu-title">Admin Panel</h2>
-            <button class="menu-btn active" data-target="dashboard">Dashboard</button>
-            <button class="menu-btn" data-target="profile">My Profile</button>
-            <button class="menu-btn" data-target="doctors">Manage Doctors</button>
-            <button class="menu-btn" data-target="patients">Manage Patients</button>
-            <button class="menu-btn" data-target="appointments">Appointments</button>
-            <button class="menu-btn" data-target="medicines">Medicines</button>
-            <button class="menu-btn" data-target="backup">Data Backup</button>
-            <button class="menu-btn" onclick="confirmLogout()">Logout</button>
-        </div>
+        <aside class="menu" aria-label="Admin navigation">
+            <a class="brand" href="../../home_page/home_page.php" aria-label="ClinicOS home">
+                <span class="brand-mark">C</span>
+                <span>
+                    <strong>ClinicOS</strong>
+                    <small>Admin workspace</small>
+                </span>
+            </a>
+            <div class="menu-group">
+                <button class="menu-btn active" data-target="dashboard">Dashboard</button>
+                <button class="menu-btn" data-target="profile">My Profile</button>
+                <button class="menu-btn" data-target="doctors">Doctors</button>
+                <button class="menu-btn" data-target="patients">Patients</button>
+                <button class="menu-btn" data-target="appointments">Appointments</button>
+                <button class="menu-btn" data-target="medicines">Medicines</button>
+                <button class="menu-btn" data-target="backup">Data Backup</button>
+            </div>
+            <button class="menu-btn logout-btn" type="button" onclick="confirmLogout()">Logout</button>
+        </aside>
         <div class="content">
+            <header class="content-topbar">
+                <div>
+                    <p class="eyebrow">Clinic operations</p>
+                    <h1>Admin workspace</h1>
+                </div>
+                <span class="status-pill">Live dashboard</span>
+            </header>
             <div class="content-section active" id="dashboard">
-                <div class="card">
-                    <h2 id="welcome-message">
-                    </h2>
+                <div class="card hero-card">
+                    <div>
+                        <p class="eyebrow">Overview</p>
+                        <h2 id="welcome-message">Welcome Admin</h2>
+                        <p class="section-copy">Monitor users, appointments, medicines, and backups from one operational control center.</p>
+                    </div>
                     <div class="stats-grid">
                         <div class="stat-box">
                             <h3>Total Doctors</h3>
@@ -71,10 +88,16 @@
             </div>
             <div class="content-section" id="profile">
                 <div class="card">
-                    <h2>Admin Profile</h2>
+                    <div class="card-header">
+                        <div>
+                            <p class="eyebrow">Account</p>
+                            <h2>Admin Profile</h2>
+                        </div>
+                    </div>
                     <div class="profile-form">
                         <h3>Update your profile</h3>
                         <form action="../../../Controller/dashboard/admin/adminProfileAction.php" method="POST">
+                            <div class="form-message" data-form-message role="alert" aria-live="polite"></div>
                             <label for="fullname">Full Name</label>
                             <input type="text" id="fullname" name="fullname" placeholder="Enter your full name">
 
@@ -92,7 +115,12 @@
                     </div>
                 </div>
                 <div class="card">
-                        <h2>Admin Information </h2>
+                        <div class="card-header">
+                            <div>
+                                <p class="eyebrow">Current record</p>
+                                <h2>Admin Information</h2>
+                            </div>
+                        </div>
                         <table class="data-table">
                             <thead>
                                 <tr>
@@ -109,7 +137,10 @@
             <div class="content-section" id="doctors">
                 <div class="card">
                     <div class="card-header">
-                        <h2>Manage Doctors</h2>
+                        <div>
+                            <p class="eyebrow">Care team</p>
+                            <h2>Manage Doctors</h2>
+                        </div>
                     </div>
                     <table class="data-table">
                         <thead>
@@ -129,7 +160,10 @@
             <div class="content-section" id="patients">
                 <div class="card">
                     <div class="card-header">
-                        <h2>Manage Patients</h2>
+                        <div>
+                            <p class="eyebrow">Patient records</p>
+                            <h2>Manage Patients</h2>
+                        </div>
                     </div>
                     <table class="data-table">
                         <thead>
@@ -150,7 +184,10 @@
             <div class="content-section" id="appointments">
                 <div class="card">
                     <div class="card-header">
-                        <h2>Manage Appointments</h2>
+                        <div>
+                            <p class="eyebrow">Schedule</p>
+                            <h2>Manage Appointments</h2>
+                        </div>
                     </div>
                     <table class="data-table">
                         <thead>
@@ -172,11 +209,15 @@
             <div class="content-section" id="medicines">
                 <div class="card">
                     <div class="card-header">
-                        <h2>Manage Medicines</h2>
+                        <div>
+                            <p class="eyebrow">Inventory</p>
+                            <h2>Manage Medicines</h2>
+                        </div>
                     </div>
                     <div class="medicine-form">
                         <h3>Add New Medicine</h3>
                         <form action="../../../Controller/dashboard/admin/addMedicineAction.php" method="POST">
+                            <div class="form-message" data-form-message role="alert" aria-live="polite"></div>
                             <label for="medicine-name">Name</label>
                             <input type="text" id="medicine-name" name="name" placeholder="Enter medicine name">
 
@@ -221,8 +262,11 @@
             <div class="content-section" id="backup">
                 <div class="card">
                     <div class="card-header">
-                        <h2>Data Backup</h2>
-                        <button class="add-btn" onclick="createBackup()">+ Create New Backup</button>
+                        <div>
+                            <p class="eyebrow">System maintenance</p>
+                            <h2>Data Backup</h2>
+                        </div>
+                        <button class="add-btn" onclick="createBackup()">Create New Backup</button>
                     </div>
                     <div class="card-body">
                         <table class="data-table">

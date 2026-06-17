@@ -4,6 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Clinic Management SaaS</title>
+        <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg?v=20260618">
         <link rel="preconnect" href="https://images.unsplash.com">
         <link rel="stylesheet" href="./style.css?v=20260618-saas">
     </head>

@@ -4,11 +4,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     buttons.forEach(button => {
         button.addEventListener("click", () => {
+            const targetId = button.getAttribute("data-target");
+            if(!targetId){
+                return;
+            }
+
             buttons.forEach(btn => btn.classList.remove("active"));
             button.classList.add("active");
 
             sections.forEach(section => section.classList.remove("active"));
-            const targetId = button.getAttribute("data-target");
             const targetSection = document.getElementById(targetId);
             if (targetSection) {
                 targetSection.classList.add("active");
