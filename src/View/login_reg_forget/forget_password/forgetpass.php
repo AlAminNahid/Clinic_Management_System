@@ -1,27 +1,53 @@
 <!DOCTYPE html>
-<html>
-    <head lang="en">
+<html lang="en">
+    <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Forget Password | Clinic Management System</title>
-        <link rel="stylesheet" href="./style.css">
-        <script src="./verification.js"></script>
+        <title>Reset Password | ClinicOS</title>
+        <link rel="stylesheet" href="./style.css?v=20260618-saas">
+        <script src="./verification.js?v=20260618-inline-errors"></script>
     </head>
     <body>
-        <header>
-            <div class="logo">Clinic Management System</div>
-            <nav>
-                <ul class="nav-ul">
-                    <li class="nav-li"><a href="">Contact</a></li>
-                </ul>
+        <header class="site-header">
+            <a class="brand" href="../../home_page/home_page.php" aria-label="ClinicOS home">
+                <span class="brand-mark">C</span>
+                <span>ClinicOS</span>
+            </a>
+
+            <nav class="site-nav" aria-label="Primary navigation">
+                <a href="../../home_page/home_page.php">Home</a>
+                <a href="../../infoSection/about.php">About</a>
+                <a href="../../infoSection/contact.php">Contact</a>
+                <a class="nav-button" href="../login/login.php">Sign in</a>
             </nav>
         </header>
 
-        <section class="forget-pass-section">
-            <div class="forget-pass-box">
-                <h2>Forget Password</h2>
-                <p class="subtitle">Enter your register email and new password.</p>
+        <main class="auth-shell">
+            <section class="auth-copy" aria-label="Password reset overview">
+                <p class="eyebrow">Account recovery</p>
+                <h1>Reset your password and return to your clinic workspace.</h1>
+                <p>
+                    Use the registered email for your ClinicOS account and choose a new password before signing in again.
+                </p>
+                <div class="value-list">
+                    <div>
+                        <strong>Keep access secure</strong>
+                        <span>Use a password that is unique to your clinic account.</span>
+                    </div>
+                    <div>
+                        <strong>Return quickly</strong>
+                        <span>After resetting, sign in to continue managing appointments and records.</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="auth-card" aria-label="Reset password form">
+                <span class="form-badge">Reset password</span>
+                <h2>Forgot password?</h2>
+                <p class="subtitle">Enter your registered email and a new password.</p>
+
                 <form action="../../../Controller/log_reg_forget/forgetPasswordAction.php" method="POST">
+                    <div class="form-message" data-form-message role="alert" aria-live="polite"></div>
                     <div class="form-group">
                         <label for="email">Email Address</label>
                         <input type="email" id="email" name="email" placeholder="Enter your email">
@@ -34,14 +60,16 @@
                         <label for="confirm_password">Confirm Password</label>
                         <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm new password">
                     </div>
-                    <button type="submit" class="submit-button">Reset Password</button>
+                    <button type="submit" class="submit-button">Reset password</button>
                 </form>
-                <p class="end-subtitle">Remember your password? <a href="../login/login.php">Go back to login</a></p>
-            </div>
-        </section>
 
-        <footer>
-            <p>Clinic Management System &copy; 2025</p>
+                <p class="end-subtitle">Remember your password? <a href="../login/login.php">Go back to sign in</a></p>
+            </section>
+        </main>
+
+        <footer class="site-footer">
+            <span>ClinicOS</span>
+            <p>&copy; 2026 Clinic Management SaaS. Built for modern healthcare teams.</p>
         </footer>
     </body>
 </html>
